@@ -1,0 +1,20 @@
+package com.jananijobs.backend.auth.controller;
+
+import com.jananijobs.backend.auth.dto.RegisterRequest;
+import com.jananijobs.backend.auth.service.AuthService;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/api/v1/auth")
+@RequiredArgsConstructor
+public class AuthController {
+
+    private final AuthService authService;
+
+    @PostMapping("/register")
+    public String register(@Valid @RequestBody RegisterRequest request) {
+        return authService.register(request);
+    }
+}
