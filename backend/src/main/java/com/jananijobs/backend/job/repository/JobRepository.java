@@ -12,11 +12,11 @@ import java.util.UUID;
 @Repository
 public interface JobRepository extends JpaRepository<Job, UUID> {
 
-    // Custom query to filter active jobs by keyword (title/description), location, and job type
     @Query("SELECT j FROM Job j WHERE j.isActive = true " +
-            "AND (:keyword IS NULL OR LOWER(j.title) LIKE LOWER(CONCAT('%', :keyword, '%')) OR LOWER(j.description) LIKE LOWER(CONCAT('%', :keyword, '%')))" +
-            "AND (:location IS NULL OR LOWER(j.location) LIKE LOWER(CONCAT('%', :location, '%')))" +
-            "AND (:jobType IS NULL OR LOWER(j.jobType) = LOWER(:jobType)) " +
+            "AND (CAST(:keyword AS string) IS NULL OR LOWER(j.title) LIKE LOWER(CONCAT('%', CAST(:keyword AS string), '%')) " +
+            "OR LOWER(j.description) LIKE LOWER(CONCAT('%', CAST(:keyword AS string), '%'))) " +
+            "AND (CAST(:location AS string) IS NULL OR LOWER(j.location) LIKE LOWER(CONCAT('%', CAST(:location AS string), '%'))) " +
+            "AND (CAST(:jobType AS string) IS NULL OR LOWER(CAST(j.jobType AS string)) = LOWER(CAST(:jobType AS string))) " +
             "ORDER BY j.createdAt DESC")
     List<Job> searchJobs(
             @Param("keyword") String keyword,
