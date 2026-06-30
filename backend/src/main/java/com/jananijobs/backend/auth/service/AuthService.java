@@ -7,8 +7,8 @@ import com.jananijobs.backend.auth.entity.Role;
 import com.jananijobs.backend.auth.entity.User;
 import com.jananijobs.backend.auth.repository.RoleRepository;
 import com.jananijobs.backend.auth.repository.UserRepository;
-import com.jananijobs.backend.security.CustomUserDetails;
 import com.jananijobs.backend.security.JwtService;
+import com.jananijobs.backend.security.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -31,51 +31,59 @@ public class AuthService {
     @Transactional
     public AuthResponse register(RegisterRequest request) {
         if (userRepository.existsByEmail(request.getEmail())) {
-            throw new RuntimeException("Email is already registered");
+            throw new RuntimeException("Email already registered");
         }
 
-        // Fetch assigned role from DB seed
-        Role userRole = roleRepository.findByName(request.getRole())
-                .orElseThrow(() -> new RuntimeException("Error: Role '" + request.getRole() + "' not found."));
+        // Normalize the role string coming from the payload (e.g., "RECRUITER" -> "ROLE_RECRUITER")
+        String requestedRole = request.getRole().toUpperCase();
+        if (!requestedRole.startsWith("ROLE_")) {
+            requestedRole = "ROLE_" + requestedRole;
+        }
 
-        // Build domain User entity
+        Role userRole = roleRepository.findByName(requestedRole)
+                .orElseThrow(() -> new RuntimeException("Role not found: " + request.getRole()));
+
         User user = User.builder()
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .firstName(request.getFirstName())
                 .lastName(request.getLastName())
                 .phoneNumber(request.getPhoneNumber())
-                .roles(Set.of(userRole))
-                .enabled(true)
-                .verified(false)
+                .roles(Set.of(userRole)) // Assigns role to user account context instantly
+                .enabled(true)           // Matches Lombok variable builder specification format
                 .build();
 
         User savedUser = userRepository.save(user);
+
         CustomUserDetails userDetails = new CustomUserDetails(savedUser);
-        String jwtToken = jwtService.generateToken(userDetails);
+        String token = jwtService.generateToken(userDetails);
 
         return AuthResponse.builder()
-                .accessToken(jwtToken)
+                .accessToken(token)
                 .email(savedUser.getEmail())
                 .role(userRole.getName())
                 .build();
     }
 
+    @Transactional(readOnly = true)
     public AuthResponse login(LoginRequest request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
         );
 
         User user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new RuntimeException("Invalid credentials"));
 
         CustomUserDetails userDetails = new CustomUserDetails(user);
-        String jwtToken = jwtService.generateToken(userDetails);
+        String token = jwtService.generateToken(userDetails);
+
+        Role primaryRole = user.getRoles().stream().findFirst()
+                .orElseThrow(() -> new RuntimeException("User has no assigned roles"));
 
         return AuthResponse.builder()
-                .accessToken(jwtToken)
+                .accessToken(token)
                 .email(user.getEmail())
-                .role(user.getRoles().iterator().next().getName())
+                .role(primaryRole.getName())
                 .build();
     }
 }

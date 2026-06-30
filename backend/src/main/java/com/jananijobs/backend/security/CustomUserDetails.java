@@ -1,6 +1,7 @@
 package com.jananijobs.backend.security;
 
 import com.jananijobs.backend.auth.entity.User;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -9,41 +10,37 @@ import java.util.Collection;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+@RequiredArgsConstructor
 public class CustomUserDetails implements UserDetails {
 
-    private final UUID id;
-    private final String email;
-    private final String password;
-    private final boolean isEnabled;
-    private final Collection<? extends GrantedAuthority> authorities;
+    private final User user;
 
-    public CustomUserDetails(User user) {
-        this.id = user.getId();
-        this.email = user.getEmail();
-        this.password = user.getPassword();
-        this.isEnabled = user.isEnabled();
-        this.authorities = user.getRoles().stream()
-                .map(role -> new SimpleGrantedAuthority(role.getName()))
-                .collect(Collectors.toList());
-    }
-
+    // ADD THIS METHOD: Allows JwtService to fetch the unique user identifier
     public UUID getId() {
-        return id;
+        return user.getId();
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return authorities;
+        return user.getRoles().stream()
+                .map(role -> {
+                    String roleName = role.getName().toUpperCase();
+                    if (!roleName.startsWith("ROLE_")) {
+                        roleName = "ROLE_" + roleName;
+                    }
+                    return new SimpleGrantedAuthority(roleName);
+                })
+                .collect(Collectors.toList());
     }
 
     @Override
     public String getPassword() {
-        return password;
+        return user.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return email; // We use email as the username
+        return user.getEmail();
     }
 
     @Override
@@ -63,6 +60,6 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return isEnabled;
+        return true;
     }
 }
