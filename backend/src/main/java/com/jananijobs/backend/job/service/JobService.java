@@ -13,6 +13,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class JobService {
@@ -43,6 +46,18 @@ public class JobService {
 
         Job savedJob = jobRepository.save(job);
         return mapToJobResponse(savedJob);
+    }
+
+    @Transactional(readOnly = true)
+    public List<JobResponse> searchJobs(String keyword, String location, String jobType) {
+        String searchKeyword = (keyword != null && !keyword.trim().isEmpty()) ? keyword.trim() : null;
+        String searchLocation = (location != null && !location.trim().isEmpty()) ? location.trim() : null;
+        String searchJobType = (jobType != null && !jobType.trim().isEmpty()) ? jobType.trim() : null;
+
+        return jobRepository.searchJobs(searchKeyword, searchLocation, searchJobType)
+                .stream()
+                .map(this::mapToJobResponse)
+                .collect(Collectors.toList());
     }
 
     private JobResponse mapToJobResponse(Job job) {
