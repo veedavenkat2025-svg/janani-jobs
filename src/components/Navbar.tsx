@@ -16,6 +16,12 @@ export default async function Navbar() {
           <Link href="/jobs" className="btn btn-secondary" style={{ padding: "0.5rem 1rem", fontSize: "0.875rem", border: "none" }}>
             Browse Jobs
           </Link>
+          <Link href="/career-paths" className="btn btn-secondary" style={{ padding: "0.5rem 1rem", fontSize: "0.875rem", border: "none", color: "var(--color-primary)", fontWeight: 600 }}>
+            Career Paths
+          </Link>
+          <Link href="/career-finder" className="btn btn-secondary" style={{ padding: "0.5rem 1rem", fontSize: "0.875rem", border: "none", color: "var(--color-primary)", fontWeight: 600 }}>
+            Career Finder
+          </Link>
           <Link href="/exam-prep" className="btn btn-secondary" style={{ padding: "0.5rem 1rem", fontSize: "0.875rem", border: "none" }}>
             Exam Prep
           </Link>
