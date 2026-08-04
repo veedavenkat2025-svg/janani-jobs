@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Janani Jobs</string>
+    <string name="title_activity_main">Janani Jobs</string>
+    <string name="package_name">com.jananijobs.app</string>
+    <string name="custom_url_scheme">com.jananijobs.app</string>
+</resources>

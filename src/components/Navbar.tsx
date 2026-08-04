@@ -7,9 +7,9 @@ export default async function Navbar() {
   const session = await getServerSession(authOptions);
 
   return (
-    <nav className="navbar">
-      <div className="container flex items-center justify-between">
-        <Link href="/" className="nav-brand text-gradient">
+    <nav className="glass-nav" style={{ padding: "1rem 0" }}>
+      <div className="container flex justify-between items-center">
+        <Link href="/" className="nav-brand text-gradient" style={{ fontSize: "1.5rem", fontWeight: 800, letterSpacing: "-1px" }}>
           Janani Jobs
         </Link>
         <div className="flex gap-2 items-center" style={{ flexWrap: "wrap", justifyContent: "flex-end" }}>
