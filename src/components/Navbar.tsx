@@ -34,8 +34,12 @@ export default async function Navbar() {
           <Link href="/exam-prep" className="btn btn-secondary" style={{ padding: "0.5rem 1rem", fontSize: "0.875rem", border: "none" }}>
             Exam Prep
           </Link>
-          <Link href="/alerts" className="btn btn-secondary" style={{ padding: "0.5rem 1rem", fontSize: "0.875rem", border: "none" }}>
-            Job Alerts
+          <Link href="/profile" className="btn btn-secondary" style={{ padding: "0.5rem 1rem", fontSize: "0.875rem", border: "none" }}>
+            My Profile
+          </Link>
+          <Link href="/notifications" className="btn btn-secondary" style={{ padding: "0.5rem", fontSize: "1rem", border: "none", position: "relative" }}>
+            🔔
+            <span style={{ position: "absolute", top: "0", right: "0", width: "8px", height: "8px", background: "var(--color-accent)", borderRadius: "50%" }}></span>
           </Link>
           <Link href="/resume-builder" className="btn btn-secondary" style={{ padding: "0.5rem 1rem", fontSize: "0.875rem", border: "none" }}>
             Resume Builder
