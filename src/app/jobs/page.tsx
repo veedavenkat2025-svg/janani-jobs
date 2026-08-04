@@ -38,34 +38,33 @@ export default async function JobsPage({ searchParams }: { searchParams: { q?: s
       </header>
 
       {/* Advanced Search & Filter Bar */}
-      <section className="card" style={{ marginBottom: "2rem", background: "var(--bg-subtle)", padding: "1rem" }}>
-        <form action="/jobs" method="GET" style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap" }}>
-          <div style={{ flex: "1 1 250px" }}>
+      <section style={{ marginBottom: "2.5rem" }}>
+        <form action="/jobs" method="GET" style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap", marginBottom: "1.5rem" }}>
+          <div style={{ flex: "1 1 300px", position: "relative" }}>
+            <span style={{ position: "absolute", left: "1rem", top: "50%", transform: "translateY(-50%)", opacity: 0.5 }}>🔍</span>
             <input 
               type="text" 
               name="q" 
               defaultValue={query}
-              placeholder="Role, Skill or City..."
-              style={{ width: "100%", padding: "0.85rem", borderRadius: "12px", border: "1px solid var(--border-color)", background: "var(--bg-main)", color: "var(--text-main)", fontSize: "1rem" }}
+              placeholder="Design, Developer, Delhi..."
+              style={{ width: "100%", padding: "1rem 1rem 1rem 2.8rem", borderRadius: "16px", border: "1px solid var(--border-color)", background: "var(--bg-card)", color: "var(--text-main)", fontSize: "1rem", outline: "none", transition: "border-color 0.3s" }}
             />
           </div>
           
-          <div style={{ flex: "1 1 120px" }}>
-            <select 
-              name="type" 
-              defaultValue={typeFilter}
-              style={{ width: "100%", padding: "0.85rem", borderRadius: "12px", border: "1px solid var(--border-color)", background: "var(--bg-main)", color: "var(--text-main)", fontSize: "1rem" }}
-            >
-              <option value="ALL">All Types</option>
-              <option value="GOVERNMENT">Govt</option>
-              <option value="PRIVATE">Private</option>
-            </select>
-          </div>
-
-          <button type="submit" className="btn btn-primary" style={{ flex: "1 1 100px" }}>
+          <button type="submit" className="btn btn-primary" style={{ padding: "0 2rem", borderRadius: "16px" }}>
             Search
           </button>
         </form>
+
+        {/* Dynamic Filter Pills */}
+        <div className="pill-container">
+          <Link href="/jobs" className={`pill ${typeFilter === 'ALL' ? 'active' : ''}`}>All Roles</Link>
+          <Link href="/jobs?type=GOVERNMENT" className={`pill ${typeFilter === 'GOVERNMENT' ? 'active' : ''}`}>🏛️ Govt Jobs</Link>
+          <Link href="/jobs?type=PRIVATE" className={`pill ${typeFilter === 'PRIVATE' ? 'active' : ''}`}>🚀 Startups/Private</Link>
+          <div className="pill">📍 Remote</div>
+          <div className="pill">💰 High Salary</div>
+          <div className="pill">⚡ Newest</div>
+        </div>
       </section>
 
       {/* Results */}
@@ -75,46 +74,74 @@ export default async function JobsPage({ searchParams }: { searchParams: { q?: s
 
       {jobs.length === 0 ? (
         <div className="card" style={{ textAlign: "center", padding: "4rem 0" }}>
-          <p style={{ color: "var(--text-muted)", fontSize: "1.25rem", marginBottom: "1rem" }}>No jobs match your search criteria.</p>
+          <p style={{ color: "var(--text-muted)", fontSize: "1.25rem", marginBottom: "1rem" }}>No jobs found. Try a different vibe?</p>
           <Link href="/jobs" className="btn btn-secondary">Clear Filters</Link>
         </div>
       ) : (
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(350px, 1fr))", gap: "2rem" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))", gap: "1.5rem" }}>
           {jobs.map((job) => (
-            <div key={job.id} className="card flex flex-col justify-between" style={{ minHeight: "250px" }}>
-              <div>
-                <div className="flex items-center justify-between" style={{ marginBottom: "1rem" }}>
-                  <span style={{ 
-                    padding: "0.25rem 0.75rem", 
-                    borderRadius: "20px", 
-                    fontSize: "0.75rem", 
-                    fontWeight: 600,
-                    background: job.type === 'GOVERNMENT' ? "rgba(0, 229, 255, 0.1)" : "rgba(112, 0, 255, 0.1)",
-                    color: job.type === 'GOVERNMENT' ? "var(--color-primary)" : "var(--color-secondary)",
-                    border: `1px solid ${job.type === 'GOVERNMENT' ? "rgba(0, 229, 255, 0.3)" : "rgba(112, 0, 255, 0.3)"}`
-                  }}>
-                    {job.type === 'GOVERNMENT' ? 'Govt Job' : 'Private'}
-                  </span>
-                  {job.deadline && (
-                    <span style={{ fontSize: "0.875rem", color: "var(--color-accent)", fontWeight: 600 }}>
-                      Ends: {job.deadline.toLocaleDateString()}
+            <div key={job.id} className="card flex flex-col justify-between" style={{ minHeight: "240px", position: "relative", overflow: "hidden", padding: "1.25rem" }}>
+
+              {/* Background Accent */}
+              <div style={{
+                position: "absolute",
+                top: "-30px",
+                left: "-30px",
+                width: "120px",
+                height: "120px",
+                background: job.type === 'GOVERNMENT' ? "var(--color-primary)" : "var(--color-secondary)",
+                filter: "blur(60px)",
+                opacity: 0.1,
+                zIndex: 0
+              }}></div>
+
+              <div style={{ zIndex: 1 }}>
+                <div className="flex items-center justify-between" style={{ marginBottom: "1.25rem" }}>
+                  <div className="flex gap-2">
+                    <span style={{
+                      padding: "0.25rem 0.6rem",
+                      borderRadius: "8px",
+                      fontSize: "0.7rem",
+                      fontWeight: 800,
+                      background: job.type === 'GOVERNMENT' ? "rgba(0, 229, 255, 0.15)" : "rgba(112, 0, 255, 0.15)",
+                      color: job.type === 'GOVERNMENT' ? "var(--color-primary)" : "#d1a3ff",
+                      border: `1px solid ${job.type === 'GOVERNMENT' ? "rgba(0, 229, 255, 0.2)" : "rgba(112, 0, 255, 0.2)"}`
+                    }}>
+                      {job.type === 'GOVERNMENT' ? 'GOVT' : 'PRIVATE'}
                     </span>
-                  )}
+                    <span style={{
+                      padding: "0.25rem 0.6rem",
+                      borderRadius: "8px",
+                      fontSize: "0.7rem",
+                      fontWeight: 800,
+                      background: "rgba(255, 255, 255, 0.05)",
+                      color: "var(--text-muted)",
+                      border: "1px solid var(--border-color)"
+                    }}>
+                      {job.location === 'Remote' ? '☁️ Remote' : `📍 ${job.location || 'India'}`}
+                    </span>
+                  </div>
+                  <button style={{ background: "none", border: "none", color: "var(--text-muted)", cursor: "pointer", fontSize: "1.2rem" }}>♡</button>
                 </div>
                 
-                <h3 style={{ fontSize: "1.25rem", marginBottom: "0.5rem" }}>{job.title}</h3>
-                <p style={{ color: "var(--text-muted)", fontWeight: 600, marginBottom: "1rem" }}>
-                  {job.organization} • {job.location || 'India'}
+                <h3 style={{ fontSize: "1.4rem", marginBottom: "0.4rem", fontWeight: 800, lineHeight: "1.2" }}>{job.title}</h3>
+                <p style={{ color: "var(--color-primary)", fontWeight: 700, fontSize: "0.95rem", marginBottom: "1rem", opacity: 0.9 }}>
+                  {job.organization}
                 </p>
-                <p style={{ color: "var(--text-muted)", fontSize: "0.9375rem", marginBottom: "1.5rem", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
-                  {job.description}
-                </p>
+
+                <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap", marginBottom: "1.5rem" }}>
+                  <span style={{ fontSize: "0.75rem", color: "var(--color-success)", background: "rgba(0, 255, 148, 0.1)", padding: "0.1rem 0.4rem", borderRadius: "4px" }}>#FreshersWelcome</span>
+                  <span style={{ fontSize: "0.75rem", color: "#f59e0b", background: "rgba(245, 158, 11, 0.1)", padding: "0.1rem 0.4rem", borderRadius: "4px" }}>#Urgent</span>
+                </div>
               </div>
               
-              <div className="flex items-center justify-between" style={{ marginTop: "auto", paddingTop: "1rem", borderTop: "1px solid var(--border-color)" }}>
-                <span style={{ fontWeight: 600 }}>{job.salary || 'Not specified'}</span>
-                <Link href={`/jobs/${job.id}`} className="btn btn-primary" style={{ padding: "0.5rem 1rem", fontSize: "0.875rem" }}>
-                  Details
+              <div className="flex items-center justify-between" style={{ marginTop: "auto", paddingTop: "1rem", borderTop: "1px solid var(--border-color)", zIndex: 1 }}>
+                <div>
+                  <p style={{ fontSize: "0.7rem", color: "var(--text-muted)", textTransform: "uppercase", fontWeight: 800, marginBottom: "2px" }}>Package</p>
+                  <span style={{ fontWeight: 800, fontSize: "1.1rem", color: "#fff" }}>{job.salary || 'Best in Market'}</span>
+                </div>
+                <Link href={`/jobs/${job.id}`} className="btn btn-primary" style={{ padding: "0.6rem 1.5rem", fontSize: "0.9rem", borderRadius: "12px", fontWeight: 800 }}>
+                  Apply →
                 </Link>
               </div>
             </div>
