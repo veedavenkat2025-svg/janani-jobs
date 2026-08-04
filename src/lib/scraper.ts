@@ -114,6 +114,9 @@ export async function runScraper() {
     const allJobs = [...upscJobs, ...sscJobs];
     let insertedCount = 0;
 
+    // Fetch all users for notifications
+    const allUsers = await prisma.user.findMany({ select: { id: true, email: true } });
+
     for (const job of allJobs) {
       // Check if job already exists to prevent duplicates
       const existingJob = await prisma.job.findFirst({
@@ -121,12 +124,28 @@ export async function runScraper() {
       });
 
       if (!existingJob) {
-        await prisma.job.create({ data: job });
+        const newJob = await prisma.job.create({ data: job });
         insertedCount++;
+
+        // --- EMAIL & NOTIFICATION ENGINE ---
+        for (const user of allUsers) {
+          // 1. Create In-App Notification
+          await prisma.notification.create({
+            data: {
+              userId: user.id,
+              title: "🔥 New Govt Job Alert!",
+              message: `${job.title} at ${job.organization} was just posted. Apply before it closes!`,
+              link: `/jobs/${newJob.id}`,
+            }
+          });
+          
+          // 2. Trigger Email Alert
+          console.log(`[EMAIL MOCK] Sent alert to ${user.email} for job ${newJob.id}`);
+        }
       }
     }
 
-    return { success: true, inserted: insertedCount, message: `Successfully scraped and inserted ${insertedCount} live jobs.` };
+    return { success: true, inserted: insertedCount, message: `Successfully scraped and inserted ${insertedCount} live jobs, and sent notifications.` };
   } catch (error: any) {
     console.error(`[Scraper API] Global Error:`, error);
     return { success: false, error: error.message };
