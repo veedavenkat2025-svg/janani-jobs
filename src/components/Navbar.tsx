@@ -22,6 +22,9 @@ export default async function Navbar() {
           <Link href="/alerts" className="btn btn-secondary" style={{ padding: "0.5rem 1rem", fontSize: "0.875rem", border: "none" }}>
             Job Alerts
           </Link>
+          <Link href="/resume-builder" className="btn btn-secondary" style={{ padding: "0.5rem 1rem", fontSize: "0.875rem", border: "none" }}>
+            Resume Builder
+          </Link>
           <AuthButton session={session} />
         </div>
       </div>
