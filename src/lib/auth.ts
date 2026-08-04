@@ -56,7 +56,4 @@ export const authOptions: NextAuthOptions = {
     }
   },
   secret: process.env.NEXTAUTH_SECRET || "janani-jobs-prod-secret-2026-secure",
-  pages: {
-    signIn: "/api/auth/signin",
-  },
 };

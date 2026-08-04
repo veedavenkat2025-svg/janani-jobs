@@ -27,44 +27,42 @@ export default async function JobsPage({ searchParams }: { searchParams: { q?: s
   });
 
   return (
-    <main className="container" style={{ padding: "4rem 0" }}>
-      <header style={{ marginBottom: "3rem", textAlign: "center" }}>
-        <h1 className="text-gradient" style={{ fontSize: "3.5rem", marginBottom: "1rem" }}>
-          Browse Opportunities
+    <main className="container" style={{ padding: "2rem 0" }}>
+      <header style={{ marginBottom: "2rem", textAlign: "center" }}>
+        <h1 className="text-gradient" style={{ marginBottom: "0.5rem" }}>
+          Find Your Vibe
         </h1>
-        <p style={{ color: "var(--text-muted)", fontSize: "1.25rem", maxWidth: "600px", margin: "0 auto" }}>
-          Use the advanced filters below to find exactly what you are looking for.
+        <p style={{ color: "var(--text-muted)", fontSize: "1.1rem", maxWidth: "600px", margin: "0 auto" }}>
+          Fresh opportunities curated for the next generation.
         </p>
       </header>
 
       {/* Advanced Search & Filter Bar */}
-      <section className="card" style={{ marginBottom: "3rem", background: "var(--bg-subtle)" }}>
-        <form action="/jobs" method="GET" style={{ display: "flex", gap: "1rem", flexWrap: "wrap", alignItems: "flex-end" }}>
-          <div style={{ flex: "1 1 300px" }}>
-            <label style={{ display: "block", marginBottom: "0.5rem", fontWeight: 600 }}>Keywords, Role, or City</label>
+      <section className="card" style={{ marginBottom: "2rem", background: "var(--bg-subtle)", padding: "1rem" }}>
+        <form action="/jobs" method="GET" style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap" }}>
+          <div style={{ flex: "1 1 250px" }}>
             <input 
               type="text" 
               name="q" 
               defaultValue={query}
-              placeholder="e.g. Software Engineer, Delhi..." 
-              style={{ width: "100%", padding: "0.75rem", borderRadius: "8px", border: "1px solid var(--border-color)", background: "var(--bg-main)", color: "var(--text-main)", fontSize: "1rem" }}
+              placeholder="Role, Skill or City..."
+              style={{ width: "100%", padding: "0.85rem", borderRadius: "12px", border: "1px solid var(--border-color)", background: "var(--bg-main)", color: "var(--text-main)", fontSize: "1rem" }}
             />
           </div>
           
-          <div style={{ flex: "1 1 200px" }}>
-            <label style={{ display: "block", marginBottom: "0.5rem", fontWeight: 600 }}>Job Type</label>
+          <div style={{ flex: "1 1 120px" }}>
             <select 
               name="type" 
               defaultValue={typeFilter}
-              style={{ width: "100%", padding: "0.75rem", borderRadius: "8px", border: "1px solid var(--border-color)", background: "var(--bg-main)", color: "var(--text-main)", fontSize: "1rem" }}
+              style={{ width: "100%", padding: "0.85rem", borderRadius: "12px", border: "1px solid var(--border-color)", background: "var(--bg-main)", color: "var(--text-main)", fontSize: "1rem" }}
             >
-              <option value="ALL">All Sectors</option>
-              <option value="GOVERNMENT">Government Only</option>
-              <option value="PRIVATE">Private Only</option>
+              <option value="ALL">All Types</option>
+              <option value="GOVERNMENT">Govt</option>
+              <option value="PRIVATE">Private</option>
             </select>
           </div>
 
-          <button type="submit" className="btn btn-primary pulse-button" style={{ padding: "0.75rem 2rem", fontSize: "1rem" }}>
+          <button type="submit" className="btn btn-primary" style={{ flex: "1 1 100px" }}>
             Search
           </button>
         </form>

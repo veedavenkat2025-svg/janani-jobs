@@ -38,7 +38,7 @@ export default function GovtExamsPage() {
           </thead>
           <tbody>
             {exams.map((exam, i) => (
-              <tr key={i} style={{ borderBottom: "1px solid var(--border-color)", transition: "background 0.2s" }} onMouseOver={e => e.currentTarget.style.background = "var(--bg-subtle)"} onMouseOut={e => e.currentTarget.style.background = "transparent"}>
+              <tr key={i} style={{ borderBottom: "1px solid var(--border-color)" }}>
                 <td style={{ padding: "1rem", fontWeight: 600 }}>{exam.name}</td>
                 <td style={{ padding: "1rem" }}>{exam.eligibility}</td>
                 <td style={{ padding: "1rem" }}>{exam.age}</td>
