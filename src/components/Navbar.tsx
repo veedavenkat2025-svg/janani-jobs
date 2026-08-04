@@ -12,15 +12,24 @@ export default async function Navbar() {
         <Link href="/" className="nav-brand text-gradient">
           Janani Jobs
         </Link>
-        <div className="flex gap-4 items-center">
+        <div className="flex gap-2 items-center" style={{ flexWrap: "wrap", justifyContent: "flex-end" }}>
           <Link href="/jobs" className="btn btn-secondary" style={{ padding: "0.5rem 1rem", fontSize: "0.875rem", border: "none" }}>
             Browse Jobs
+          </Link>
+          <Link href="/govt-exams" className="btn btn-secondary" style={{ padding: "0.5rem 1rem", fontSize: "0.875rem", border: "none", color: "var(--color-primary)", fontWeight: 600 }}>
+            Govt Exams
           </Link>
           <Link href="/career-paths" className="btn btn-secondary" style={{ padding: "0.5rem 1rem", fontSize: "0.875rem", border: "none", color: "var(--color-primary)", fontWeight: 600 }}>
             Career Paths
           </Link>
           <Link href="/career-finder" className="btn btn-secondary" style={{ padding: "0.5rem 1rem", fontSize: "0.875rem", border: "none", color: "var(--color-primary)", fontWeight: 600 }}>
             Career Finder
+          </Link>
+          <Link href="/learn" className="btn btn-secondary" style={{ padding: "0.5rem 1rem", fontSize: "0.875rem", border: "none" }}>
+            Free Learning
+          </Link>
+          <Link href="/scholarships" className="btn btn-secondary" style={{ padding: "0.5rem 1rem", fontSize: "0.875rem", border: "none" }}>
+            Scholarships
           </Link>
           <Link href="/exam-prep" className="btn btn-secondary" style={{ padding: "0.5rem 1rem", fontSize: "0.875rem", border: "none" }}>
             Exam Prep

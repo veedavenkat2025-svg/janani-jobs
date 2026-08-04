@@ -12,6 +12,13 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "Janani Jobs - Sarkari & Private Jobs",
   description: "Find the latest government and private sector jobs in India. One platform for all your career needs.",
+  manifest: "/manifest.json",
+  themeColor: "#10b981",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "Janani Jobs",
+  },
 };
 
 export default function RootLayout({
