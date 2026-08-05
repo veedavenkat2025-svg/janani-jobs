@@ -1,13 +1,13 @@
 :root {
-  /* Core Colors */
-  --bg-main: #0B0E14; /* Deep modern dark blue/black */
-  --bg-card: rgba(20, 24, 34, 0.6); /* Translucent dark card */
+  /* Core Colors - Updated to Modern "Genzhi" Dark Forest */
+  --bg-main: #050A08; /* Deep Forest Black */
+  --bg-card: rgba(10, 20, 16, 0.6); /* Translucent forest card */
   --bg-subtle: rgba(255, 255, 255, 0.03);
   
   --color-primary: #00FF94; /* Emerald Green */
   --color-primary-glow: rgba(0, 255, 148, 0.4);
-  --color-secondary: #00E5FF; /* Cyan Neon */
-  --color-secondary-glow: rgba(0, 229, 255, 0.4);
+  --color-secondary: #8CFFD1; /* Mint accent */
+  --color-secondary-glow: rgba(140, 255, 209, 0.4);
   --color-accent: #FF0055; /* Neon Pink */
   --color-success: #00FF94; /* Emerald Green */
   
