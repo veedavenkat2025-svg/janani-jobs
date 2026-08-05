@@ -43,10 +43,17 @@ export default async function ProfilePage() {
         )}
         <div>
           <h1 className="text-gradient" style={{ fontSize: "2.5rem" }}>{user.name}</h1>
-          <p style={{ color: "var(--text-muted)", fontSize: "1.25rem" }}>{user.email}</p>
-          <span style={{ display: "inline-block", marginTop: "0.5rem", padding: "0.25rem 0.75rem", borderRadius: "20px", background: "var(--bg-subtle)", border: "1px solid var(--border-color)", fontSize: "0.875rem" }}>
-            Role: {user.role}
-          </span>
+          <p style={{ color: "var(--text-muted)", fontSize: "1.25rem", marginBottom: "0.5rem" }}>{user.email}</p>
+          <div style={{ display: "flex", gap: "0.5rem" }}>
+            <span style={{ display: "inline-block", padding: "0.25rem 0.75rem", borderRadius: "20px", background: "var(--bg-subtle)", border: "1px solid var(--border-color)", fontSize: "0.875rem" }}>
+              Role: {user.role}
+            </span>
+            {user.qualification && (
+              <span style={{ display: "inline-block", padding: "0.25rem 0.75rem", borderRadius: "20px", background: "rgba(0, 255, 148, 0.1)", border: "1px solid rgba(0, 255, 148, 0.3)", color: "var(--color-primary)", fontSize: "0.875rem", fontWeight: 600 }}>
+                🎓 {user.qualification}
+              </span>
+            )}
+          </div>
         </div>
       </header>
 

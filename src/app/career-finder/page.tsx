@@ -1,166 +1,104 @@
 "use client";
 
 import { useState } from "react";
-import { careerFinderData } from "@/lib/careerData";
 import Link from "next/link";
 
 export default function CareerFinderPage() {
-  const [education, setEducation] = useState("");
-  const [stream, setStream] = useState("");
-  const [results, setResults] = useState<any>(null);
+  const [step, setStep] = useState(0);
+  const [score, setScore] = useState(0);
 
-  const handleEducationChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setEducation(e.target.value);
-    setStream(""); // Reset stream on edu change
-    setResults(null);
+  const questions = [
+    {
+      question: "What is your primary career goal?",
+      options: [
+        { text: "Long-term job security & benefits", points: -1 },
+        { text: "Rapid growth & high salary potential", points: 1 }
+      ]
+    },
+    {
+      question: "How do you prefer your work environment?",
+      options: [
+        { text: "Structured, with clear rules and timings", points: -1 },
+        { text: "Fast-paced, flexible, and dynamic", points: 1 }
+      ]
+    },
+    {
+      question: "Are you willing to relocate frequently?",
+      options: [
+        { text: "Yes, I can move across India if required", points: -1 },
+        { text: "No, I prefer staying in major tech/metro hubs", points: 1 }
+      ]
+    }
+  ];
+
+  const handleAnswer = (points: number) => {
+    setScore(score + points);
+    setStep(step + 1);
   };
 
-  const handleStreamChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setStream(e.target.value);
-    setResults(null);
-  };
+  const isGovt = score < 0;
 
-  const handleSearch = () => {
-    if (!education) return;
-    const recs = careerFinderData.getRecommendations(education, stream);
-    setResults(recs);
-  };
+  if (step >= questions.length) {
+    return (
+      <main className="container" style={{ padding: "6rem 0", maxWidth: "600px", textAlign: "center" }}>
+        <h1 className="text-gradient" style={{ fontSize: "3rem", marginBottom: "1rem" }}>Your Perfect Match</h1>
+        <div className="card animate-float" style={{ padding: "4rem 2rem", border: `1px solid ${isGovt ? "rgba(0, 255, 148, 0.3)" : "rgba(0, 229, 255, 0.3)"}`, background: isGovt ? "rgba(0, 255, 148, 0.05)" : "rgba(0, 229, 255, 0.05)" }}>
+          <div style={{ fontSize: "4rem", marginBottom: "1rem" }}>{isGovt ? "🏛️" : "🚀"}</div>
+          <h2 style={{ fontSize: "2rem", marginBottom: "1rem" }}>
+            {isGovt ? "Government Sector" : "Private & Startup Sector"}
+          </h2>
+          <p style={{ color: "var(--text-muted)", marginBottom: "3rem", fontSize: "1.1rem" }}>
+            {isGovt 
+              ? "Based on your answers, you value stability, structured growth, and excellent benefits. You are a perfect fit for UPSC, SSC, and Banking jobs!" 
+              : "Based on your answers, you value rapid growth, dynamic environments, and high reward potential. The private sector is calling your name!"}
+          </p>
+          
+          <Link href={isGovt ? "/jobs?type=GOVERNMENT" : "/jobs?type=PRIVATE"} className="btn btn-primary pulse-button" style={{ padding: "1rem 2rem", fontSize: "1.2rem" }}>
+            Browse {isGovt ? "Government" : "Private"} Jobs →
+          </Link>
+        </div>
+      </main>
+    );
+  }
+
+  const currentQ = questions[step];
 
   return (
-    <main className="container" style={{ padding: "4rem 0", maxWidth: "1000px" }}>
-      <header style={{ textAlign: "center", marginBottom: "3rem" }}>
-        <h1 className="text-gradient" style={{ fontSize: "3.5rem", marginBottom: "1rem" }}>
-          What Can I Become?
-        </h1>
-        <p style={{ color: "var(--text-muted)", fontSize: "1.25rem", maxWidth: "600px", margin: "0 auto" }}>
-          Tell us what you've studied, and we'll show you exactly which government jobs, private roles, and competitive exams you qualify for.
-        </p>
+    <main className="container" style={{ padding: "4rem 0", maxWidth: "600px", textAlign: "center" }}>
+      <header style={{ marginBottom: "4rem" }}>
+        <h1 className="text-gradient" style={{ fontSize: "2.5rem", marginBottom: "1rem" }}>Career Path Finder</h1>
+        <p style={{ color: "var(--text-muted)" }}>Answer a few quick questions to find your ideal career trajectory.</p>
       </header>
 
-      {/* Quiz Card */}
-      <div className="card" style={{ padding: "3rem", marginBottom: "3rem", background: "var(--bg-subtle)" }}>
-        <div style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
-          
-          <div>
-            <label style={{ display: "block", fontSize: "1.125rem", fontWeight: 600, marginBottom: "0.5rem" }}>
-              1. What is your highest qualification?
-            </label>
-            <select 
-              value={education} 
-              onChange={handleEducationChange}
-              style={{ width: "100%", padding: "1rem", fontSize: "1rem", borderRadius: "8px", border: "1px solid var(--border-color)", background: "var(--bg-card)", color: "var(--text-main)" }}
-            >
-              <option value="">-- Select Qualification --</option>
-              {careerFinderData.educationLevels.map(lvl => (
-                <option key={lvl} value={lvl}>{lvl}</option>
-              ))}
-            </select>
-          </div>
-
-          {education && education !== "10th Pass" && (
-            <div>
-              <label style={{ display: "block", fontSize: "1.125rem", fontWeight: 600, marginBottom: "0.5rem" }}>
-                2. What was your Stream/Degree?
-              </label>
-              <select 
-                value={stream} 
-                onChange={handleStreamChange}
-                style={{ width: "100%", padding: "1rem", fontSize: "1rem", borderRadius: "8px", border: "1px solid var(--border-color)", background: "var(--bg-card)", color: "var(--text-main)" }}
-              >
-                <option value="">-- Select Stream --</option>
-                {/* @ts-ignore */}
-                {careerFinderData.streams[education]?.map((st: string) => (
-                  <option key={st} value={st}>{st}</option>
-                ))}
-              </select>
-            </div>
-          )}
-
-          <button 
-            onClick={handleSearch} 
-            disabled={!education || (education !== "10th Pass" && !stream)}
-            className="btn btn-primary" 
-            style={{ padding: "1rem", fontSize: "1.25rem", marginTop: "1rem" }}
-          >
-            Show My Career Options ✨
-          </button>
-
-        </div>
+      <div style={{ width: "100%", height: "6px", background: "var(--bg-card)", marginBottom: "3rem", borderRadius: "3px" }}>
+        <div style={{ width: `${(step / questions.length) * 100}%`, height: "100%", background: "var(--color-primary)", transition: "width 0.3s ease" }}></div>
       </div>
 
-      {/* Results Section */}
-      {results && (
-        <div style={{ display: "flex", flexDirection: "column", gap: "2rem", animation: "fadeIn 0.5s ease" }}>
-          
-          <h2 style={{ fontSize: "2rem", textAlign: "center", marginBottom: "1rem", borderBottom: "2px solid var(--border-color)", paddingBottom: "1rem" }}>
-            Your Personalized Opportunities
-          </h2>
-
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "2rem" }}>
-            
-            {/* Govt Jobs */}
-            <div className="card" style={{ borderTop: "4px solid var(--color-primary)" }}>
-              <h3 style={{ fontSize: "1.5rem", marginBottom: "1rem", color: "var(--color-primary)" }}>🏛️ Govt Jobs You Qualify For</h3>
-              {results.government.length > 0 ? (
-                <ul style={{ listStyle: "none", padding: 0, display: "flex", flexDirection: "column", gap: "1rem" }}>
-                  {results.government.map((job: any, i: number) => (
-                    <li key={i} style={{ padding: "1rem", background: "var(--bg-subtle)", borderRadius: "8px" }}>
-                      <div style={{ fontWeight: 600, fontSize: "1.125rem", marginBottom: "0.25rem" }}>{job.title}</div>
-                      <div style={{ color: "var(--text-muted)", fontSize: "0.875rem" }}>Expected Salary: {job.salary}</div>
-                    </li>
-                  ))}
-                </ul>
-              ) : <p>Select your criteria to see options.</p>}
-            </div>
-
-            {/* Exams */}
-            <div className="card" style={{ borderTop: "4px solid #f59e0b" }}>
-              <h3 style={{ fontSize: "1.5rem", marginBottom: "1rem", color: "#f59e0b" }}>📚 Top Exams to Prepare For</h3>
-              {results.exams.length > 0 ? (
-                <ul style={{ listStyle: "none", padding: 0, display: "flex", flexDirection: "column", gap: "1rem" }}>
-                  {results.exams.map((exam: any, i: number) => (
-                    <li key={i} style={{ padding: "1rem", background: "var(--bg-subtle)", borderRadius: "8px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                      <span style={{ fontWeight: 600, fontSize: "1.125rem" }}>{exam.title}</span>
-                      <a href={`https://${exam.link}`} target="_blank" rel="noopener noreferrer" className="btn btn-secondary" style={{ padding: "0.25rem 0.5rem", fontSize: "0.75rem" }}>
-                        Official Site
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              ) : <p>Select your criteria to see options.</p>}
-            </div>
-
-            {/* Private Jobs */}
-            <div className="card" style={{ borderTop: "4px solid var(--color-secondary)" }}>
-              <h3 style={{ fontSize: "1.5rem", marginBottom: "1rem", color: "var(--color-secondary)" }}>🏢 Private Sector Roles</h3>
-              {results.private.length > 0 ? (
-                <ul style={{ listStyle: "none", padding: 0, display: "flex", flexDirection: "column", gap: "1rem" }}>
-                  {results.private.map((job: any, i: number) => (
-                    <li key={i} style={{ padding: "1rem", background: "var(--bg-subtle)", borderRadius: "8px" }}>
-                      <div style={{ fontWeight: 600, fontSize: "1.125rem", marginBottom: "0.25rem" }}>{job.title}</div>
-                      <div style={{ color: "var(--text-muted)", fontSize: "0.875rem" }}>Expected Salary: {job.salary}</div>
-                    </li>
-                  ))}
-                </ul>
-              ) : <p>Select your criteria to see options.</p>}
-            </div>
-
-          </div>
-
-          <div style={{ textAlign: "center", marginTop: "2rem" }}>
-             <Link href="/jobs" className="btn btn-primary" style={{ padding: "1rem 2rem", fontSize: "1.125rem" }}>
-                Browse Live Jobs Now →
-             </Link>
-          </div>
-
+      <div className="card" style={{ padding: "3rem 2rem" }}>
+        <h2 style={{ fontSize: "1.5rem", marginBottom: "3rem" }}>{currentQ.question}</h2>
+        <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+          {currentQ.options.map((opt, idx) => (
+            <button 
+              key={idx}
+              onClick={() => handleAnswer(opt.points)}
+              style={{
+                padding: "1.5rem",
+                borderRadius: "12px",
+                border: "1px solid rgba(255,255,255,0.1)",
+                background: "var(--bg-subtle)",
+                color: "#fff",
+                fontSize: "1.1rem",
+                cursor: "pointer",
+                transition: "all 0.2s ease"
+              }}
+              onMouseOver={(e) => e.currentTarget.style.borderColor = "var(--color-primary)"}
+              onMouseOut={(e) => e.currentTarget.style.borderColor = "rgba(255,255,255,0.1)"}
+            >
+              {opt.text}
+            </button>
+          ))}
         </div>
-      )}
-      <style dangerouslySetInnerHTML={{__html: `
-        @keyframes fadeIn {
-          from { opacity: 0; transform: translateY(20px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-      `}} />
+      </div>
     </main>
   );
 }
