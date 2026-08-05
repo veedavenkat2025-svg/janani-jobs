@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: '/',
       disallow: ['/admin', '/api/auth/'],
     },
-    sitemap: 'https://janani-jobs.genz/sitemap.xml',
+    sitemap: 'https://janani-jobs.vercel.app/sitemap.xml',
   };
 }
