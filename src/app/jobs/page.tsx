@@ -2,9 +2,10 @@ import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
-export default async function JobsPage({ searchParams }: { searchParams: { q?: string, type?: string } }) {
-  const query = searchParams.q || "";
-  const typeFilter = searchParams.type || "ALL";
+export default async function JobsPage(props: { searchParams: Promise<{ q?: string, type?: string }> }) {
+  const searchParams = await props.searchParams;
+  const query = searchParams?.q || "";
+  const typeFilter = searchParams?.type || "ALL";
 
   // Build the Prisma query dynamically
   const whereClause: any = {};

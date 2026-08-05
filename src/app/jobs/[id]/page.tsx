@@ -5,7 +5,9 @@ import { authOptions } from "@/lib/auth";
 import { toggleSaveJob } from "../actions";
 import Link from "next/link";
 
-export default async function JobDetailsPage({ params }: { params: { id: string } }) {
+export default async function JobDetailsPage(props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
+  
   const job = await prisma.job.findUnique({
     where: { id: params.id }
   });
