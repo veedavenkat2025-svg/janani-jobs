@@ -128,20 +128,23 @@ export async function runScraper() {
         insertedCount++;
 
         // --- EMAIL & NOTIFICATION ENGINE ---
-        for (const user of allUsers) {
-          // 1. Create In-App Notification
-          await prisma.notification.create({
-            data: {
-              userId: user.id,
-              title: "🔥 New Govt Job Alert!",
-              message: `${job.title} at ${job.organization} was just posted. Apply before it closes!`,
-              link: `/jobs/${newJob.id}`,
-            }
+        // Bulk Create Notifications for Performance
+        const notificationsToInsert = allUsers.map((user) => ({
+          userId: user.id,
+          title: "🔥 New Govt Job Alert!",
+          message: `${job.title} at ${job.organization} was just posted. Apply before it closes!`,
+          link: `/jobs/${newJob.id}`,
+        }));
+
+        if (notificationsToInsert.length > 0) {
+          await prisma.notification.createMany({
+            data: notificationsToInsert,
+            skipDuplicates: true,
           });
-          
-          // 2. Trigger Email Alert
-          console.log(`[EMAIL MOCK] Sent alert to ${user.email} for job ${newJob.id}`);
         }
+        
+        // Log Email Alerts
+        console.log(`[EMAIL MOCK] Dispatched email alerts for job ${newJob.id} to ${allUsers.length} users.`);
       }
     }
 

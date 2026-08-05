@@ -23,7 +23,8 @@ export default async function JobsPage({ searchParams }: { searchParams: { q?: s
 
   const jobs = await prisma.job.findMany({
     where: whereClause,
-    orderBy: { postedAt: "desc" }
+    orderBy: { postedAt: "desc" },
+    take: 50, // Limits to top 50 to prevent backend memory crash on scale
   });
 
   return (
