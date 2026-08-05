@@ -23,9 +23,9 @@ export default function ExamPrepPage() {
           <ul style={{ listStyle: "none", padding: 0, marginBottom: "2rem", display: "flex", flexDirection: "column", gap: "0.5rem" }}>
             <li>📄 <a href="#" style={{ color: "var(--color-primary)" }}>Download 2026 Syllabus</a></li>
             <li>📚 <a href="#" style={{ color: "var(--color-primary)" }}>Previous Year Question Papers</a></li>
-            <li>📝 <a href="#" style={{ color: "var(--color-primary)" }}>Free Mock Test Series</a></li>
+            <li>📝 <Link href="/exam-prep/mock-test" style={{ color: "var(--color-primary)" }}>Free Mock Test Series</Link></li>
           </ul>
-          <button className="btn btn-primary" style={{ width: "100%" }}>Start Preparation</button>
+          <Link href="/exam-prep/mock-test" className="btn btn-primary" style={{ width: "100%", display: "block" }}>Take Free Mock Test</Link>
         </div>
 
         {/* Banking Card */}
@@ -37,9 +37,9 @@ export default function ExamPrepPage() {
           <ul style={{ listStyle: "none", padding: 0, marginBottom: "2rem", display: "flex", flexDirection: "column", gap: "0.5rem" }}>
             <li>📄 <a href="#" style={{ color: "var(--color-primary)" }}>Download Latest Syllabus</a></li>
             <li>📚 <a href="#" style={{ color: "var(--color-primary)" }}>Topic-wise Practice Sets</a></li>
-            <li>📝 <a href="#" style={{ color: "var(--color-primary)" }}>Speed & Accuracy Tests</a></li>
+            <li>📝 <Link href="/exam-prep/mock-test" style={{ color: "var(--color-primary)" }}>Speed & Accuracy Tests</Link></li>
           </ul>
-          <button className="btn btn-primary" style={{ width: "100%" }}>Start Preparation</button>
+          <Link href="/exam-prep/mock-test" className="btn btn-primary" style={{ width: "100%", display: "block" }}>Take Free Mock Test</Link>
         </div>
 
         {/* SSC Card */}
@@ -51,9 +51,9 @@ export default function ExamPrepPage() {
           <ul style={{ listStyle: "none", padding: 0, marginBottom: "2rem", display: "flex", flexDirection: "column", gap: "0.5rem" }}>
             <li>📄 <a href="#" style={{ color: "var(--color-primary)" }}>Complete Pattern Guide</a></li>
             <li>📚 <a href="#" style={{ color: "var(--color-primary)" }}>English & Math Formula Book</a></li>
-            <li>📝 <a href="#" style={{ color: "var(--color-primary)" }}>Weekly Live Mocks</a></li>
+            <li>📝 <Link href="/exam-prep/mock-test" style={{ color: "var(--color-primary)" }}>Weekly Live Mocks</Link></li>
           </ul>
-          <button className="btn btn-primary" style={{ width: "100%" }}>Start Preparation</button>
+          <Link href="/exam-prep/mock-test" className="btn btn-primary" style={{ width: "100%", display: "block" }}>Take Free Mock Test</Link>
         </div>
 
       </div>
