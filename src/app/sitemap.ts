@@ -2,7 +2,7 @@ import { MetadataRoute } from 'next';
 import { prisma } from '@/lib/prisma';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = 'https://janani-jobs.vercel.app'; 
+  const baseUrl = 'https://janani-jobs.genz.app'; 
 
   // Fetch top 50 recent jobs for the sitemap
   const jobs = await prisma.job.findMany({

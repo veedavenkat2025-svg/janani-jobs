@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Janani Jobs - Your Career Journey Begins Here",
     description: "Get alerts for Sarkari Naukri and Private Jobs, take free Mock Tests, and generate an AI Resume instantly.",
-    url: "https://janani-jobs.vercel.app",
+    url: "https://janani-jobs.genz.app",
     siteName: "Janani Jobs",
     type: "website",
   },
