@@ -21,8 +21,8 @@ export default function ExamPrepPage() {
             Comprehensive resources for IAS, IPS, and IFS aspirants. Includes Prelims & Mains strategy.
           </p>
           <ul style={{ listStyle: "none", padding: 0, marginBottom: "2rem", display: "flex", flexDirection: "column", gap: "0.5rem" }}>
-            <li>📄 <a href="#" style={{ color: "var(--color-primary)" }}>Download 2026 Syllabus</a></li>
-            <li>📚 <a href="#" style={{ color: "var(--color-primary)" }}>Previous Year Question Papers</a></li>
+            <li>📄 <a href="https://upsc.gov.in/examinations/revised-syllabus-scheme" target="_blank" rel="noopener noreferrer" style={{ color: "var(--color-primary)" }}>Download 2026 Syllabus</a></li>
+            <li>📚 <a href="https://upsc.gov.in/examinations/previous-question-papers" target="_blank" rel="noopener noreferrer" style={{ color: "var(--color-primary)" }}>Previous Year Question Papers</a></li>
             <li>📝 <Link href="/exam-prep/mock-test" style={{ color: "var(--color-primary)" }}>Free Mock Test Series</Link></li>
           </ul>
           <Link href="/exam-prep/mock-test" className="btn btn-primary" style={{ width: "100%", display: "block" }}>Take Free Mock Test</Link>
@@ -35,8 +35,8 @@ export default function ExamPrepPage() {
             Master Quantitative Aptitude, Reasoning, and General Awareness for PO and Clerk exams.
           </p>
           <ul style={{ listStyle: "none", padding: 0, marginBottom: "2rem", display: "flex", flexDirection: "column", gap: "0.5rem" }}>
-            <li>📄 <a href="#" style={{ color: "var(--color-primary)" }}>Download Latest Syllabus</a></li>
-            <li>📚 <a href="#" style={{ color: "var(--color-primary)" }}>Topic-wise Practice Sets</a></li>
+            <li>📄 <a href="https://www.ibps.in/" target="_blank" rel="noopener noreferrer" style={{ color: "var(--color-primary)" }}>Download Latest Syllabus</a></li>
+            <li>📚 <a href="https://www.ibps.in/" target="_blank" rel="noopener noreferrer" style={{ color: "var(--color-primary)" }}>Topic-wise Practice Sets</a></li>
             <li>📝 <Link href="/exam-prep/mock-test" style={{ color: "var(--color-primary)" }}>Speed & Accuracy Tests</Link></li>
           </ul>
           <Link href="/exam-prep/mock-test" className="btn btn-primary" style={{ width: "100%", display: "block" }}>Take Free Mock Test</Link>
@@ -49,8 +49,8 @@ export default function ExamPrepPage() {
             Target Tier I & Tier II with our expert-curated mock exams and quick revision notes.
           </p>
           <ul style={{ listStyle: "none", padding: 0, marginBottom: "2rem", display: "flex", flexDirection: "column", gap: "0.5rem" }}>
-            <li>📄 <a href="#" style={{ color: "var(--color-primary)" }}>Complete Pattern Guide</a></li>
-            <li>📚 <a href="#" style={{ color: "var(--color-primary)" }}>English & Math Formula Book</a></li>
+            <li>📄 <a href="https://ssc.gov.in/" target="_blank" rel="noopener noreferrer" style={{ color: "var(--color-primary)" }}>Complete Pattern Guide</a></li>
+            <li>📚 <a href="https://ssc.gov.in/" target="_blank" rel="noopener noreferrer" style={{ color: "var(--color-primary)" }}>English & Math Formula Book</a></li>
             <li>📝 <Link href="/exam-prep/mock-test" style={{ color: "var(--color-primary)" }}>Weekly Live Mocks</Link></li>
           </ul>
           <Link href="/exam-prep/mock-test" className="btn btn-primary" style={{ width: "100%", display: "block" }}>Take Free Mock Test</Link>
