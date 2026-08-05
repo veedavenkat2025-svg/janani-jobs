@@ -4,6 +4,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { toggleSaveJob } from "../actions";
 import Link from "next/link";
+import ShareButton from "./ShareButton";
 
 export default async function JobDetailsPage(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
@@ -122,11 +123,13 @@ export default async function JobDetailsPage(props: { params: Promise<{ id: stri
           <p style={{ whiteSpace: "pre-wrap", color: "var(--text-muted)" }}>{job.description}</p>
         </div>
 
-        <div style={{ display: "flex", gap: "1rem" }}>
-          <a href={job.applyUrl} target="_blank" rel="noopener noreferrer" className="btn btn-primary" style={{ padding: "1rem 2rem", fontSize: "1.125rem", flex: 1, textAlign: "center" }}>
+        <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
+          <a href={job.applyUrl} target="_blank" rel="noopener noreferrer" className="btn btn-primary" style={{ padding: "1rem 2rem", fontSize: "1.125rem", flex: 1, textAlign: "center", minWidth: "200px" }}>
             Apply Now
           </a>
           
+          <ShareButton title={job.title} text={`Check out this job at ${job.organization}`} />
+
           <form action={async () => {
             "use server";
             await toggleSaveJob(job.id);
