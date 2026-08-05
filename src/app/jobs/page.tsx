@@ -131,6 +131,7 @@ export default async function JobsPage(props: { searchParams: Promise<{ q?: stri
                   {job.organization}
                 </p>
 
+                <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap", marginBottom: "1.5rem" }}>
                   <span style={{ fontSize: "0.7rem", opacity: 0.7 }}>📍 {job.location || 'India'}</span>
                   <span style={{ fontSize: "0.7rem", opacity: 0.7 }}>🕒 Full-time</span>
                   {job.qualification && (

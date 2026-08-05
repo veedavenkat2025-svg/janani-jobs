@@ -89,6 +89,11 @@ async function scrapeSSC(): Promise<ParsedJob[]> {
           qualification = "Diploma";
         }
 
+        let fullLink = href;
+        if (href.startsWith('/')) {
+            fullLink = `https://ssc.gov.in${href}`;
+        }
+
         jobs.push({
           title: text.substring(0, 190),
           organization: "Staff Selection Commission (SSC)",
