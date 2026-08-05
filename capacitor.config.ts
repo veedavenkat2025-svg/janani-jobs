@@ -6,7 +6,7 @@ const config: CapacitorConfig = {
   webDir: 'public',
   server: {
     url: 'https://janani-jobs-beta.vercel.app',
-    cleartext: true
+    cleartext: false
   }
 };
 
