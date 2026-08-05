@@ -57,6 +57,39 @@ export default async function ProfilePage() {
         </div>
       </header>
 
+      {/* Emotion: Gamified Journey Dashboard */}
+      <section className="card" style={{ marginBottom: "4rem", padding: "3rem 2rem", border: "1px solid rgba(0, 229, 255, 0.3)", background: "var(--bg-subtle)" }}>
+        <h2 style={{ fontSize: "2rem", marginBottom: "1rem", color: "var(--color-primary)" }}>Your Career Journey 🚀</h2>
+        
+        {(() => {
+          // Fake Gamification Logic
+          const xp = user.savedJobs.length * 150;
+          let level = 1;
+          let nextLevelXP = 300;
+          let rank = "Novice Seeker";
+          
+          if (xp >= 300 && xp < 900) { level = 2; nextLevelXP = 900; rank = "Active Applicant"; }
+          else if (xp >= 900) { level = 3; nextLevelXP = 2000; rank = "Pro Candidate 🏆"; }
+
+          const progress = Math.min((xp / nextLevelXP) * 100, 100);
+
+          return (
+            <div>
+              <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "0.5rem" }}>
+                <span style={{ fontWeight: 800, fontSize: "1.2rem" }}>Level {level}: {rank}</span>
+                <span style={{ color: "var(--text-muted)" }}>{xp} / {nextLevelXP} XP</span>
+              </div>
+              <div style={{ width: "100%", height: "12px", background: "rgba(255,255,255,0.1)", borderRadius: "6px", overflow: "hidden", marginBottom: "1.5rem" }}>
+                <div style={{ width: `${progress}%`, height: "100%", background: "var(--color-primary)", transition: "width 1s ease" }}></div>
+              </div>
+              <p style={{ color: "var(--text-muted)", fontSize: "0.95rem" }}>
+                💡 Earn more XP by saving jobs, taking mock tests, and exploring career paths!
+              </p>
+            </div>
+          );
+        })()}
+      </section>
+
       <section>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "2rem" }}>
           <h2 style={{ fontSize: "2rem" }}>Saved Jobs</h2>

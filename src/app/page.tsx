@@ -58,15 +58,36 @@ export default async function Home() {
           <p style={{ fontSize: "clamp(1rem, 4vw, 1.25rem)", color: "var(--text-muted)", maxWidth: "600px", margin: "0 auto 3rem auto" }}>
             The ultimate platform for Sarkari Naukri, Private Sector Roles, and Career Guidance. Curated specifically for the youth.
           </p>
-          <div style={{ display: "flex", gap: "1rem", justifyContent: "center", flexWrap: "wrap" }}>
-            <Link href="/jobs" className="btn btn-primary pulse-button" style={{ padding: "1rem 2rem", fontSize: "1.125rem", minWidth: "200px" }}>
-              Explore Jobs Now
+          <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
+            <Link href="/jobs" className="btn btn-primary pulse-button" style={{ fontSize: '1.25rem', padding: '1rem 2rem' }}>
+              Explore Live Jobs
             </Link>
-            <Link href="/career-paths" className="btn btn-secondary" style={{ padding: "1rem 2rem", fontSize: "1.125rem", minWidth: "200px" }}>
-              Career Paths
+            <Link href="/exam-prep" className="btn btn-secondary" style={{ fontSize: '1.25rem', padding: '1rem 2rem' }}>
+              Mock Tests
             </Link>
           </div>
         </div>
+
+        {/* Emotion: Live Success Stories Marquee */}
+        <div style={{ width: '100%', overflow: 'hidden', marginTop: '4rem', padding: '1rem 0', background: 'var(--bg-subtle)', borderTop: '1px solid var(--border-color)', borderBottom: '1px solid var(--border-color)' }}>
+          <div style={{ display: 'flex', gap: '2rem', whiteSpace: 'nowrap', animation: 'marquee 25s linear infinite' }}>
+            <span style={{ fontSize: '1.1rem', color: 'var(--color-primary)' }}>✨ Rahul from Delhi just passed the SSC CGL Mock Test!</span>
+            <span style={{ fontSize: '1.1rem', color: 'var(--color-secondary)' }}>🚀 Priya from Bangalore applied for a Private Tech Role!</span>
+            <span style={{ fontSize: '1.1rem', color: 'var(--color-success)' }}>🎉 Amit from Mumbai generated his AI Resume!</span>
+            <span style={{ fontSize: '1.1rem', color: 'var(--color-primary)' }}>✨ Neha from Pune saved a UPSC Notification!</span>
+            {/* Duplicate for infinite loop illusion */}
+            <span style={{ fontSize: '1.1rem', color: 'var(--color-primary)' }}>✨ Rahul from Delhi just passed the SSC CGL Mock Test!</span>
+            <span style={{ fontSize: '1.1rem', color: 'var(--color-secondary)' }}>🚀 Priya from Bangalore applied for a Private Tech Role!</span>
+          </div>
+        </div>
+
+        {/* CSS for Marquee inline for simplicity */}
+        <style dangerouslySetInnerHTML={{__html: `
+          @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+          }
+        `}} />
       </section>
 
       {/* Quick Actions / Featured Categories */}

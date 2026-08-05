@@ -59,7 +59,7 @@ export default function MockTestPage() {
         setTimeLeft((prev) => prev - 1);
       }, 1000);
     } else if (timeLeft === 0 && !showResults) {
-      setShowResults(true);
+      handleSubmit();
     }
     return () => clearInterval(timer);
   }, [hasStarted, showResults, timeLeft]);
@@ -80,6 +80,27 @@ export default function MockTestPage() {
       setCurrentQuestionIdx((prev) => prev + 1);
     } else {
       setShowResults(true);
+      // Let's calculate score inline to trigger confetti
+      let score = 0;
+      MOCK_QUESTIONS.forEach((q, idx) => {
+        if (selectedOptions[idx] === q.correctAnswer) {
+          score += 1;
+        }
+      });
+      const percentage = Math.round((score / MOCK_QUESTIONS.length) * 100);
+      if (percentage >= 60) {
+        setTimeout(() => {
+          import("canvas-confetti").then((module) => {
+            const confetti = module.default;
+            confetti({
+              particleCount: 200,
+              spread: 100,
+              origin: { y: 0.5 },
+              colors: ['#00ff94', '#00e5ff']
+            });
+          });
+        }, 300);
+      }
     }
   };
 

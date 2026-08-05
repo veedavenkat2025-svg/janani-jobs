@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import confetti from "canvas-confetti";
 
 export default function ResumeBuilderPage() {
   const [formData, setFormData] = useState({
@@ -21,6 +22,13 @@ export default function ResumeBuilderPage() {
   const handleGenerate = (e: React.FormEvent) => {
     e.preventDefault();
     setIsGenerated(true);
+    // Emotion: Trigger celebration
+    confetti({
+      particleCount: 150,
+      spread: 70,
+      origin: { y: 0.6 },
+      colors: ['#00e5ff', '#00ff94', '#7000ff']
+    });
   };
 
   if (isGenerated) {
