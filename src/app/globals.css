@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 :root {
   /* Cyber Forest Theme - High-End Greenish UI */
   --bg-main: #020403; /* Near black forest */
