@@ -14,13 +14,9 @@
         <item name="colorSecondaryContainer">@color/secondaryContainer</item>
         <item name="colorOnSecondaryContainer">@color/onSecondaryContainer</item>
 
-        <item name="colorTertiary">@color/tertiary</item>
-        <item name="colorOnTertiary">@color/onTertiary</item>
-        <item name="colorTertiaryContainer">@color/tertiaryContainer</item>
-        <item name="colorOnTertiaryContainer">@color/onTertiaryContainer</item>
-
-        <item name="android:navigationBarColor">@android:color/transparent</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowBackground">@color/background</item>
+        <item name="android:navigationBarColor">@color/background</item>
+        <item name="android:statusBarColor">@color/background</item>
         <item name="android:windowLightStatusBar">false</item>
     </style>
 

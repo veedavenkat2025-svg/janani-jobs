@@ -2,6 +2,8 @@ import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
+export const revalidate = 60; // Cache page for 60 seconds (eliminates DB lag)
+
 export default async function JobsPage(props: { searchParams: Promise<{ q?: string, type?: string }> }) {
   const searchParams = await props.searchParams;
   const query = searchParams?.q || "";

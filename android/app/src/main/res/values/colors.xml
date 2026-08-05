@@ -1,28 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Modern "Genzhi" Dark Forest Palette -->
-    <color name="primary">#00FF94</color>
-    <color name="onPrimary">#003920</color>
+    <!-- "Cyber Forest" Genzhi Green Palette -->
+    <color name="primary">#00FF94</color> <!-- Emerald -->
+    <color name="onPrimary">#002112</color>
     <color name="primaryContainer">#005230</color>
     <color name="onPrimaryContainer">#8CFFD1</color>
 
-    <color name="secondary">#B1CCC0</color>
-    <color name="onSecondary">#1D352B</color>
-    <color name="secondaryContainer">#334B41</color>
-    <color name="onSecondaryContainer">#CDE8DC</color>
+    <color name="secondary">#CCFF00</color> <!-- Neon Lime -->
+    <color name="onSecondary">#1D2100</color>
+    <color name="secondaryContainer">#444B00</color>
+    <color name="onSecondaryContainer">#E6FF7A</color>
 
     <color name="tertiary">#A9CDCF</color>
     <color name="onTertiary">#103638</color>
     <color name="tertiaryContainer">#294C4E</color>
     <color name="onTertiaryContainer">#C5E9EC</color>
 
-    <color name="background">#050A08</color>
+    <color name="background">#020403</color> <!-- Cyber Black -->
     <color name="onBackground">#E0E4DF</color>
-    <color name="surface">#050A08</color>
+    <color name="surface">#0A0F0D</color> <!-- Dark Forest Surface -->
     <color name="onSurface">#E0E4DF</color>
 
-    <!-- Legacy support -->
     <color name="colorPrimary">#00FF94</color>
-    <color name="colorPrimaryDark">#050A08</color>
-    <color name="colorAccent">#00FF94</color>
+    <color name="colorPrimaryDark">#020403</color>
+    <color name="colorAccent">#CCFF00</color>
 </resources>

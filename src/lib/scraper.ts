@@ -155,6 +155,47 @@ async function scrapePrivateJobs(): Promise<ParsedJob[]> {
 }
 
 /**
+ * Helper to fetch from a public Govt Jobs RSS aggregator for specific keywords
+ */
+async function fetchAggregatedGovtJobs(keyword: string, orgName: string, qualification: string): Promise<ParsedJob[]> {
+  console.log(`[Scraper] Fetching ${orgName} jobs...`);
+  const jobs: ParsedJob[] = [];
+  try {
+    const response = await fetch("https://www.indgovtjobs.in/feeds/posts/default?alt=rss");
+    const xml = await response.text();
+    const itemRegex = /<item>[\s\S]*?<title>(?:<!\[CDATA\[)?(.*?)(?:\]\]>)?<\/title>[\s\S]*?<link>(.*?)<\/link>[\s\S]*?<\/item>/g;
+    let match;
+    while ((match = itemRegex.exec(xml)) !== null) {
+      const title = match[1].trim();
+      const link = match[2].trim();
+      if (title.toLowerCase().includes(keyword.toLowerCase())) {
+        jobs.push({
+          title: title.substring(0, 190),
+          organization: orgName,
+          type: "GOVERNMENT",
+          description: `Official Notification: ${title}`,
+          salary: "As per Govt Norms",
+          qualification,
+          applyUrl: link,
+          deadline: new Date(new Date().getTime() + 30 * 24 * 60 * 60 * 1000),
+        });
+      }
+    }
+  } catch (error) {
+    console.error(`[Scraper] ${orgName} Error:`, error);
+  }
+  return jobs.slice(0, 5); // Return top 5 recent ones
+}
+
+async function scrapeIBPS(): Promise<ParsedJob[]> {
+  return fetchAggregatedGovtJobs("Bank", "Institute of Banking Personnel Selection (IBPS)", "Graduation");
+}
+
+async function scrapeRRB(): Promise<ParsedJob[]> {
+  return fetchAggregatedGovtJobs("Railway", "Railway Recruitment Board (RRB)", "10th Pass");
+}
+
+/**
  * Main Engine that aggregates all modular scrapers
  */
 export async function runScraper() {
@@ -163,9 +204,11 @@ export async function runScraper() {
   try {
     const upscJobs = await scrapeUPSC();
     const sscJobs = await scrapeSSC();
+    const ibpsJobs = await scrapeIBPS();
+    const rrbJobs = await scrapeRRB();
     const privateJobs = await scrapePrivateJobs();
     
-    const allJobs = [...upscJobs, ...sscJobs, ...privateJobs];
+    const allJobs = [...upscJobs, ...sscJobs, ...ibpsJobs, ...rrbJobs, ...privateJobs];
     let insertedCount = 0;
 
     // Fetch all users for notifications

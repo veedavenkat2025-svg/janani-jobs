@@ -1,5 +1,8 @@
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
+import { getServerSession } from "next-auth";
+
+export const revalidate = 60; // Cache page for 60 seconds
 
 // This is a Server Component, we can fetch data directly!
 export default async function Home() {
