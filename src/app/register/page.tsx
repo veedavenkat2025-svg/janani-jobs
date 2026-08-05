@@ -8,6 +8,7 @@ export default function RegisterPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [qualification, setQualification] = useState("Graduation");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const router = useRouter();
@@ -21,7 +22,7 @@ export default function RegisterPage() {
       const res = await fetch("/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, password }),
+        body: JSON.stringify({ name, email, password, qualification }),
       });
 
       if (res.ok) {
@@ -71,6 +72,24 @@ export default function RegisterPage() {
               onFocus={(e) => e.target.style.borderColor = "var(--color-primary)"}
               onBlur={(e) => e.target.style.borderColor = "rgba(255, 255, 255, 0.1)"}
             />
+          </div>
+
+          <div>
+            <label style={{ display: "block", marginBottom: "0.5rem", fontSize: "0.875rem", color: "var(--text-muted)", fontWeight: 600 }}>Highest Qualification</label>
+            <select 
+              value={qualification}
+              onChange={(e) => setQualification(e.target.value)}
+              required
+              style={{ width: "100%", padding: "1rem", borderRadius: "12px", border: "1px solid rgba(255, 255, 255, 0.1)", background: "rgba(0, 0, 0, 0.5)", color: "#fff", fontSize: "1rem", outline: "none", transition: "border 0.2s" }}
+              onFocus={(e) => e.target.style.borderColor = "var(--color-primary)"}
+              onBlur={(e) => e.target.style.borderColor = "rgba(255, 255, 255, 0.1)"}
+            >
+              <option value="10th Pass">10th Pass</option>
+              <option value="12th Pass">12th Pass</option>
+              <option value="Diploma">Diploma</option>
+              <option value="Graduation">Graduation</option>
+              <option value="Post-Graduation">Post-Graduation</option>
+            </select>
           </div>
 
           <div>

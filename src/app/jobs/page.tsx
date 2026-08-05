@@ -131,9 +131,11 @@ export default async function JobsPage(props: { searchParams: Promise<{ q?: stri
                   {job.organization}
                 </p>
 
-                <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap", marginBottom: "1.5rem" }}>
-                  <span style={{ fontSize: "0.75rem", color: "var(--color-success)", background: "rgba(0, 255, 148, 0.1)", padding: "0.1rem 0.4rem", borderRadius: "4px" }}>#FreshersWelcome</span>
-                  <span style={{ fontSize: "0.75rem", color: "#f59e0b", background: "rgba(245, 158, 11, 0.1)", padding: "0.1rem 0.4rem", borderRadius: "4px" }}>#Urgent</span>
+                  <span style={{ fontSize: "0.7rem", opacity: 0.7 }}>📍 {job.location || 'India'}</span>
+                  <span style={{ fontSize: "0.7rem", opacity: 0.7 }}>🕒 Full-time</span>
+                  {job.qualification && (
+                    <span style={{ fontSize: "0.7rem", opacity: 0.7, color: "var(--color-primary)" }}>🎓 {job.qualification}</span>
+                  )}
                 </div>
               </div>
               

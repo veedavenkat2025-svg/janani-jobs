@@ -9,6 +9,7 @@ type ParsedJob = {
   type: string;
   description: string;
   salary: string;
+  qualification: string;
   applyUrl: string;
   deadline: Date;
 };
@@ -39,6 +40,7 @@ async function scrapeUPSC(): Promise<ParsedJob[]> {
         type: "GOVERNMENT",
         description: `Official Notification: ${title}`,
         salary: "As per Govt Norms",
+        qualification: "Graduation", // UPSC almost always requires Graduation
         applyUrl: link,
         deadline: new Date(new Date().getTime() + 30 * 24 * 60 * 60 * 1000),
       });
@@ -76,9 +78,15 @@ async function scrapeSSC(): Promise<ParsedJob[]> {
       // Filter for links that sound like job notices (Examination, Recruitment, Notice)
       if (text.length > 20 && (text.toLowerCase().includes('examination') || text.toLowerCase().includes('notice') || text.toLowerCase().includes('recruitment'))) {
         
-        let fullLink = href;
-        if (href.startsWith('/')) {
-            fullLink = `https://ssc.gov.in${href}`;
+        let qualification = "12th Pass"; // Default fallback for SSC
+        if (text.toLowerCase().includes('cgl') || text.toLowerCase().includes('graduate')) {
+          qualification = "Graduation";
+        } else if (text.toLowerCase().includes('mts') || text.toLowerCase().includes('multi tasking')) {
+          qualification = "10th Pass";
+        } else if (text.toLowerCase().includes('chsl') || text.toLowerCase().includes('10+2')) {
+          qualification = "12th Pass";
+        } else if (text.toLowerCase().includes('je') || text.toLowerCase().includes('junior engineer')) {
+          qualification = "Diploma";
         }
 
         jobs.push({
@@ -87,6 +95,7 @@ async function scrapeSSC(): Promise<ParsedJob[]> {
           type: "GOVERNMENT",
           description: `Official SSC Notice: ${text}`,
           salary: "As per Govt Norms",
+          qualification,
           applyUrl: fullLink,
           deadline: new Date(new Date().getTime() + 30 * 24 * 60 * 60 * 1000),
         });

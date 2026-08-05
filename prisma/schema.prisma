@@ -19,6 +19,7 @@ model Job {
   description  String
   applyUrl     String
   salary       String?
+  qualification String?  // e.g., '10th Pass', '12th Pass', 'Graduation'
   deadline     DateTime?
   postedAt     DateTime  @default(now())
   createdAt    DateTime  @default(now())
@@ -92,6 +93,7 @@ model User {
   emailVerified DateTime?
   image         String?
   password      String?
+  qualification String?   // e.g., '10th Pass', '12th Pass', 'Graduation'
   role          String    @default("USER") // 'USER' or 'ADMIN'
   accounts      Account[]
   sessions      Session[]

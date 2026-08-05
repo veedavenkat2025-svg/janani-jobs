@@ -4,11 +4,11 @@ import bcrypt from "bcryptjs";
 
 export async function POST(req: Request) {
   try {
-    const { name, email, password } = await req.json();
+    const { name, email, password, qualification } = await req.json();
 
-    if (!name || !email || !password) {
+    if (!name || !email || !password || !qualification) {
       return NextResponse.json(
-        { message: "Missing required fields" },
+        { message: "Name, email, qualification, and password are required" },
         { status: 400 }
       );
     }
@@ -25,15 +25,16 @@ export async function POST(req: Request) {
       );
     }
 
-    // Hash the password
-    const hashedPassword = await bcrypt.hash(password, 12);
+    // Hash the password securely
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Create the user
+    // Create the new user
     await prisma.user.create({
       data: {
         name,
         email,
         password: hashedPassword,
+        qualification,
       },
     });
 
