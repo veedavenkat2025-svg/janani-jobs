@@ -71,26 +71,27 @@ export default async function Home() {
 
       {/* Quick Actions / Featured Categories */}
       <section className="container" style={{ padding: "2rem 0" }}>
-        <h2 style={{ textAlign: "center", fontSize: "clamp(1.8rem, 5vw, 2.5rem)", marginBottom: "3rem" }}>Why Choose <span className="text-gradient">Janani Jobs?</span></h2>
-        
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "1.5rem" }}>
           
-          <div className="card" style={{ textAlign: "center", borderBottom: "4px solid var(--color-primary)" }}>
-            <h3 style={{ fontSize: "1.5rem", marginBottom: "1rem", color: "var(--color-primary)" }}>🏛️ Live Govt Jobs</h3>
-            <p style={{ color: "var(--text-muted)", marginBottom: "1.5rem", fontSize: "0.95rem" }}>Auto-updating database of SSC, UPSC, and Banking jobs directly from official portals.</p>
-            <Link href="/govt-exams" className="btn btn-secondary" style={{ width: "100%", borderRadius: "10px" }}>View Govt Exams</Link>
+          <div className="card animate-float" style={{ textAlign: "center", border: "1px solid var(--border-color)", background: "linear-gradient(180deg, rgba(0, 229, 255, 0.05) 0%, transparent 100%)" }}>
+            <div style={{ fontSize: "3rem", marginBottom: "1rem" }}>🏛️</div>
+            <h3 style={{ fontSize: "1.5rem", marginBottom: "0.5rem", color: "var(--color-primary)" }}>Govt Jobs</h3>
+            <p style={{ color: "var(--text-muted)", marginBottom: "1.5rem", fontSize: "0.9rem" }}>SSC, UPSC, Banking & more. Verified daily.</p>
+            <Link href="/govt-exams" className="btn btn-secondary" style={{ width: "100%", borderRadius: "12px" }}>Explore Now</Link>
           </div>
           
-          <div className="card" style={{ textAlign: "center", borderBottom: "4px solid var(--color-secondary)" }}>
-            <h3 style={{ fontSize: "1.5rem", marginBottom: "1rem", color: "var(--color-secondary)" }}>✨ Career Finder</h3>
-            <p style={{ color: "var(--text-muted)", marginBottom: "1.5rem", fontSize: "0.95rem" }}>Take our interactive quiz to instantly find out what jobs and exams you qualify for.</p>
-            <Link href="/career-finder" className="btn btn-secondary" style={{ width: "100%", borderRadius: "10px" }}>Take the Quiz</Link>
+          <div className="card animate-float" style={{ textAlign: "center", border: "1px solid var(--border-color)", background: "linear-gradient(180deg, rgba(112, 0, 255, 0.05) 0%, transparent 100%)", animationDelay: "1s" }}>
+            <div style={{ fontSize: "3rem", marginBottom: "1rem" }}>✨</div>
+            <h3 style={{ fontSize: "1.5rem", marginBottom: "0.5rem", color: "var(--color-secondary)" }}>Career Finder</h3>
+            <p style={{ color: "var(--text-muted)", marginBottom: "1.5rem", fontSize: "0.9rem" }}>Not sure where to start? Take the 2-min quiz.</p>
+            <Link href="/career-finder" className="btn btn-secondary" style={{ width: "100%", borderRadius: "12px" }}>Start Quiz</Link>
           </div>
 
-          <div className="card" style={{ textAlign: "center", borderBottom: "4px solid #f59e0b" }}>
-            <h3 style={{ fontSize: "1.5rem", marginBottom: "1rem", color: "#f59e0b" }}>📝 ATS Resume</h3>
-            <p style={{ color: "var(--text-muted)", marginBottom: "1.5rem", fontSize: "0.95rem" }}>Build a professional, ATS-friendly resume guaranteed to pass automated screening.</p>
-            <Link href="/resume-builder" className="btn btn-secondary" style={{ width: "100%", borderRadius: "10px" }}>Build Resume</Link>
+          <div className="card animate-float" style={{ textAlign: "center", border: "1px solid var(--border-color)", background: "linear-gradient(180deg, rgba(245, 158, 11, 0.05) 0%, transparent 100%)", animationDelay: "2s" }}>
+            <div style={{ fontSize: "3rem", marginBottom: "1rem" }}>📝</div>
+            <h3 style={{ fontSize: "1.5rem", marginBottom: "0.5rem", color: "#f59e0b" }}>Resume AI</h3>
+            <p style={{ color: "var(--text-muted)", marginBottom: "1.5rem", fontSize: "0.9rem" }}>Build a resume that actually gets you hired.</p>
+            <Link href="/resume-builder" className="btn btn-secondary" style={{ width: "100%", borderRadius: "12px" }}>Build Yours</Link>
           </div>
 
         </div>
@@ -99,54 +100,57 @@ export default async function Home() {
       {/* Latest Jobs Section */}
       <section className="container" style={{ padding: "4rem 0" }}>
         <div className="flex items-center justify-between" style={{ marginBottom: "2rem" }}>
-          <h2 style={{ fontSize: "clamp(1.8rem, 5vw, 2.5rem)" }}>Latest Drops ⚡</h2>
+          <h2 style={{ fontSize: "clamp(1.8rem, 5vw, 2.5rem)" }}>New Drops ⚡</h2>
           <Link href="/jobs" style={{ color: "var(--color-primary)", fontWeight: 800 }}>View All →</Link>
         </div>
 
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))", gap: "1.5rem" }}>
           {displayJobs.map((job) => (
-            <div key={job.id} className="card flex flex-col justify-between" style={{ minHeight: "220px", position: "relative", overflow: "hidden" }}>
+            <div key={job.id} className="card flex flex-col justify-between" style={{ minHeight: "240px", position: "relative", overflow: "hidden", padding: "1.25rem" }}>
               <div style={{
                 position: "absolute",
-                top: "-20px",
-                right: "-20px",
-                width: "100px",
-                height: "100px",
+                top: "-30px",
+                right: "-30px",
+                width: "120px",
+                height: "120px",
                 background: job.type === 'GOVERNMENT' ? "var(--color-primary)" : "var(--color-secondary)",
-                filter: "blur(50px)",
+                filter: "blur(60px)",
                 opacity: 0.1,
                 zIndex: 0
               }}></div>
 
               <div style={{ zIndex: 1 }}>
-                <div className="flex items-center justify-between" style={{ marginBottom: "1rem" }}>
+                <div className="flex items-center justify-between" style={{ marginBottom: "1.25rem" }}>
                   <span style={{ 
-                    padding: "0.2rem 0.6rem",
+                    padding: "0.25rem 0.6rem",
                     borderRadius: "8px",
                     fontSize: "0.7rem",
                     fontWeight: 800,
-                    textTransform: "uppercase",
-                    background: job.type === 'GOVERNMENT' ? "rgba(0, 229, 255, 0.2)" : "rgba(112, 0, 255, 0.2)",
+                    background: job.type === 'GOVERNMENT' ? "rgba(0, 229, 255, 0.15)" : "rgba(112, 0, 255, 0.15)",
                     color: job.type === 'GOVERNMENT' ? "var(--color-primary)" : "#d1a3ff",
-                    border: `1px solid ${job.type === 'GOVERNMENT' ? "rgba(0, 229, 255, 0.3)" : "rgba(112, 0, 255, 0.3)"}`
+                    border: `1px solid ${job.type === 'GOVERNMENT' ? "rgba(0, 229, 255, 0.2)" : "rgba(112, 0, 255, 0.2)"}`
                   }}>
                     {job.type === 'GOVERNMENT' ? '🏛️ Govt' : '🚀 Private'}
                   </span>
+                  <span style={{ fontSize: "0.7rem", color: "var(--text-muted)", fontWeight: 700 }}>
+                    #{job.id.slice(0, 4)}
+                  </span>
                 </div>
                 
-                <h3 style={{ fontSize: "1.3rem", marginBottom: "0.4rem", fontWeight: 800 }}>{job.title}</h3>
-                <p style={{ color: "var(--text-muted)", fontWeight: 600, fontSize: "0.9rem", marginBottom: "0.8rem" }}>
+                <h3 style={{ fontSize: "1.4rem", marginBottom: "0.4rem", fontWeight: 800 }}>{job.title}</h3>
+                <p style={{ color: "var(--text-muted)", fontWeight: 600, fontSize: "0.95rem", marginBottom: "0.8rem" }}>
                   @{job.organization}
                 </p>
-                <p style={{ color: "var(--text-muted)", fontSize: "0.85rem", marginBottom: "1.2rem", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
-                  {job.description}
-                </p>
+                <div style={{ display: "flex", gap: "0.5rem", marginBottom: "1rem" }}>
+                   <span style={{ fontSize: "0.7rem", opacity: 0.7 }}>📍 {job.location || 'India'}</span>
+                   <span style={{ fontSize: "0.7rem", opacity: 0.7 }}>🕒 Full-time</span>
+                </div>
               </div>
               
-              <div className="flex items-center justify-between" style={{ marginTop: "auto", paddingTop: "0.8rem", borderTop: "1px solid var(--border-color)", zIndex: 1 }}>
+              <div className="flex items-center justify-between" style={{ marginTop: "auto", paddingTop: "1rem", borderTop: "1px solid var(--border-color)", zIndex: 1 }}>
                 <span style={{ fontWeight: 800, fontSize: "1.1rem", color: "var(--color-primary)" }}>{job.salary || '💰 TBD'}</span>
-                <Link href={`/jobs/${job.id}`} className="btn btn-primary" style={{ padding: "0.4rem 1.2rem", fontSize: "0.85rem", borderRadius: "10px" }}>
-                  Check it
+                <Link href={`/jobs/${job.id}`} className="btn btn-primary" style={{ padding: "0.6rem 1.2rem", fontSize: "0.85rem", borderRadius: "10px", fontWeight: 800 }}>
+                  Apply Now
                 </Link>
               </div>
             </div>

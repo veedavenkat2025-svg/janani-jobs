@@ -25,6 +25,9 @@ model Job {
   updatedAt    DateTime  @updatedAt
 
   savedBy      SavedJob[]
+
+  @@index([type])
+  @@index([postedAt(sort: Desc)])
 }
 
 model SavedJob {
@@ -49,6 +52,8 @@ model Notification {
   createdAt DateTime @default(now())
 
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, isRead])
 }
 
 // --- NextAuth Models ---
@@ -86,6 +91,7 @@ model User {
   email         String?   @unique
   emailVerified DateTime?
   image         String?
+  password      String?
   role          String    @default("USER") // 'USER' or 'ADMIN'
   accounts      Account[]
   sessions      Session[]

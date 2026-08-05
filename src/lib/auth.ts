@@ -2,6 +2,7 @@ import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { prisma } from "@/lib/prisma";
+import bcrypt from "bcryptjs";
 
 // Auto-detect the app URL on Vercel
 const getBaseUrl = () => {
@@ -17,7 +18,7 @@ export const authOptions: NextAuthOptions = {
   },
   providers: [
     CredentialsProvider({
-      name: "Demo Account",
+      name: "Secure Account",
       credentials: {
         email: { label: "Email", type: "text", placeholder: "demo@janani.com" },
         password: { label: "Password", type: "password" }
@@ -25,18 +26,18 @@ export const authOptions: NextAuthOptions = {
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) return null;
         
-        // For demonstration, we allow any email to login and automatically create a mock user
-        let user = await prisma.user.findUnique({
+        const user = await prisma.user.findUnique({
           where: { email: credentials.email }
         });
 
-        if (!user) {
-          user = await prisma.user.create({
-            data: {
-              email: credentials.email,
-              name: credentials.email.split('@')[0],
-            }
-          });
+        if (!user || !user.password) {
+          return null; // User not found or signed up via OAuth without password
+        }
+
+        const isPasswordValid = await bcrypt.compare(credentials.password, user.password);
+
+        if (!isPasswordValid) {
+          return null;
         }
         
         return {
