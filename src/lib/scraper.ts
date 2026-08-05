@@ -116,6 +116,39 @@ async function scrapeSSC(): Promise<ParsedJob[]> {
 }
 
 /**
+ * Scrapes Private Sector Jobs (Startups, Remote Tech)
+ * We use the public Remotive API to fetch real remote software jobs.
+ */
+async function scrapePrivateJobs(): Promise<ParsedJob[]> {
+  console.log(`[Scraper] Fetching Private/Startup jobs...`);
+  const jobs: ParsedJob[] = [];
+  try {
+    // Fetch Software Dev remote jobs, limit to top 15 most recent
+    const response = await fetch("https://remotive.com/api/remote-jobs?category=software-dev&limit=15");
+    const data = await response.json();
+    
+    if (data && data.jobs) {
+      data.jobs.slice(0, 15).forEach((job: any) => {
+        // Remotive jobs don't have strict deadlines, assume 30 days from now
+        jobs.push({
+          title: job.title.substring(0, 190),
+          organization: job.company_name,
+          type: "PRIVATE",
+          description: `Remote Opportunity at ${job.company_name}. Category: ${job.category}`,
+          salary: job.salary || "Competitive",
+          qualification: "Graduation", // Default for software jobs
+          applyUrl: job.url,
+          deadline: new Date(new Date().getTime() + 30 * 24 * 60 * 60 * 1000),
+        });
+      });
+    }
+  } catch (error) {
+    console.error(`[Scraper] Private Jobs Error:`, error);
+  }
+  return jobs;
+}
+
+/**
  * Main Engine that aggregates all modular scrapers
  */
 export async function runScraper() {
@@ -124,8 +157,9 @@ export async function runScraper() {
   try {
     const upscJobs = await scrapeUPSC();
     const sscJobs = await scrapeSSC();
+    const privateJobs = await scrapePrivateJobs();
     
-    const allJobs = [...upscJobs, ...sscJobs];
+    const allJobs = [...upscJobs, ...sscJobs, ...privateJobs];
     let insertedCount = 0;
 
     // Fetch all users for notifications
@@ -142,10 +176,13 @@ export async function runScraper() {
         insertedCount++;
 
         // --- EMAIL & NOTIFICATION ENGINE ---
+        // Dynamically set title based on job type
+        const notifTitle = job.type === 'GOVERNMENT' ? "🔥 New Govt Job Alert!" : "🚀 New Private Tech Job!";
+        
         // Bulk Create Notifications for Performance
         const notificationsToInsert = allUsers.map((user) => ({
           userId: user.id,
-          title: "🔥 New Govt Job Alert!",
+          title: notifTitle,
           message: `${job.title} at ${job.organization} was just posted. Apply before it closes!`,
           link: `/jobs/${newJob.id}`,
         }));
