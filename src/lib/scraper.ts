@@ -128,7 +128,13 @@ async function scrapePrivateJobs(): Promise<ParsedJob[]> {
     const data = await response.json();
     
     if (data && data.jobs) {
-      data.jobs.slice(0, 15).forEach((job: any) => {
+      // Filter out jobs that specifically exclude India
+      const eligibleJobs = data.jobs.filter((job: any) => {
+        const loc = (job.candidate_required_location || "").toLowerCase();
+        return loc.includes("india") || loc.includes("worldwide") || loc.includes("global") || loc.includes("anywhere") || loc === "";
+      });
+
+      eligibleJobs.slice(0, 15).forEach((job: any) => {
         // Remotive jobs don't have strict deadlines, assume 30 days from now
         jobs.push({
           title: job.title.substring(0, 190),
