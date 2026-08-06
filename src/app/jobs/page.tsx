@@ -4,10 +4,12 @@ import { redirect } from "next/navigation";
 
 export const revalidate = 60; // Cache page for 60 seconds (eliminates DB lag)
 
-export default async function JobsPage(props: { searchParams: Promise<{ q?: string, type?: string }> }) {
+export default async function JobsPage(props: { searchParams: Promise<{ q?: string, type?: string, location?: string, sort?: string }> }) {
   const searchParams = await props.searchParams;
   const query = searchParams?.q || "";
   const typeFilter = searchParams?.type || "ALL";
+  const locationFilter = searchParams?.location || "ALL";
+  const sortFilter = searchParams?.sort || "newest";
 
   // Build the Prisma query dynamically
   const whereClause: any = {};
@@ -24,9 +26,20 @@ export default async function JobsPage(props: { searchParams: Promise<{ q?: stri
     whereClause.type = typeFilter;
   }
 
+  if (locationFilter === "Remote") {
+    whereClause.location = { contains: "Remote", mode: "insensitive" };
+  }
+
+  const orderBy: any = {};
+  if (sortFilter === "salary") {
+    orderBy.salary = "desc";
+  } else {
+    orderBy.postedAt = "desc";
+  }
+
   const jobs = await prisma.job.findMany({
     where: whereClause,
-    orderBy: { postedAt: "desc" },
+    orderBy: orderBy,
     take: 50, // Limits to top 50 to prevent backend memory crash on scale
   });
 
@@ -62,12 +75,12 @@ export default async function JobsPage(props: { searchParams: Promise<{ q?: stri
 
         {/* Dynamic Filter Pills */}
         <div className="pill-container">
-          <Link href="/jobs" className={`pill ${typeFilter === 'ALL' ? 'active' : ''}`}>All Roles</Link>
+          <Link href="/jobs" className={`pill ${typeFilter === 'ALL' && locationFilter === 'ALL' && sortFilter === 'newest' ? 'active' : ''}`}>All Roles</Link>
           <Link href="/jobs?type=GOVERNMENT" className={`pill ${typeFilter === 'GOVERNMENT' ? 'active' : ''}`}>🏛️ Govt Jobs</Link>
           <Link href="/jobs?type=PRIVATE" className={`pill ${typeFilter === 'PRIVATE' ? 'active' : ''}`}>🚀 Startups/Private</Link>
-          <div className="pill">📍 Remote</div>
-          <div className="pill">💰 High Salary</div>
-          <div className="pill">⚡ Newest</div>
+          <Link href="/jobs?location=Remote" className={`pill ${locationFilter === 'Remote' ? 'active' : ''}`}>📍 Remote</Link>
+          <Link href="/jobs?sort=salary" className={`pill ${sortFilter === 'salary' ? 'active' : ''}`}>💰 High Salary</Link>
+          <Link href="/jobs?sort=newest" className={`pill ${sortFilter === 'newest' && typeFilter === 'ALL' && locationFilter === 'ALL' ? 'active' : ''}`}>⚡ Newest</Link>
         </div>
       </section>
 
