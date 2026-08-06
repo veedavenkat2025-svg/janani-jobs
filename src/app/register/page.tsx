@@ -42,10 +42,10 @@ export default function RegisterPage() {
     <main style={{ minHeight: "80vh", display: "flex", alignItems: "center", justifyContent: "center", padding: "2rem" }}>
       
       {/* Background Animated Orbs */}
-      <div style={{ position: "absolute", top: "20%", left: "10%", width: "400px", height: "400px", background: "var(--color-primary)", filter: "blur(120px)", opacity: 0.15, borderRadius: "50%", zIndex: -1 }} className="animate-float"></div>
-      <div style={{ position: "absolute", bottom: "10%", right: "10%", width: "300px", height: "300px", background: "var(--color-secondary)", filter: "blur(120px)", opacity: 0.15, borderRadius: "50%", zIndex: -1, animationDelay: "2s" }} className="animate-float"></div>
+      <div style={{ position: "absolute", top: "20%", left: "10%", width: "400px", height: "400px", background: "var(--color-primary)", filter: "blur(120px)", opacity: 0.15, borderRadius: "50%", zIndex: -1, pointerEvents: "none" }} className="animate-float"></div>
+      <div style={{ position: "absolute", bottom: "10%", right: "10%", width: "300px", height: "300px", background: "var(--color-secondary)", filter: "blur(120px)", opacity: 0.15, borderRadius: "50%", zIndex: -1, animationDelay: "2s", pointerEvents: "none" }} className="animate-float"></div>
 
-      <div className="card" style={{ maxWidth: "450px", width: "100%", padding: "3rem", background: "rgba(10, 10, 10, 0.6)", backdropFilter: "blur(20px)", border: "1px solid rgba(255, 255, 255, 0.05)", borderRadius: "24px", boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.5)" }}>
+      <div className="card" style={{ position: "relative", zIndex: 10, maxWidth: "450px", width: "100%", padding: "3rem", background: "rgba(10, 10, 10, 0.6)", backdropFilter: "blur(20px)", border: "1px solid rgba(255, 255, 255, 0.05)", borderRadius: "24px", boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.5)" }}>
         
         <div style={{ textAlign: "center", marginBottom: "2.5rem" }}>
           <h1 className="text-gradient" style={{ fontSize: "2.5rem", marginBottom: "0.5rem" }}>Create Account</h1>
