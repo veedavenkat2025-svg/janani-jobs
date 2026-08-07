@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.jananijobs.app",
+      "sha256_cert_fingerprints": [
+        "14:DF:13:84:25:4B:92:45:AA:78:C5:EF:C3:F1:B7:88:23:64:30:06:15:EB:D5:9E:5F:62:87:61:08:78:F0:9D"
+      ]
+    }
+  }
+]
