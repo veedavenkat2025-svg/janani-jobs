@@ -72,11 +72,11 @@ export default async function Home({
         </div>
       </nav>
 
-      {/* Scrolling Marquee */}
-      <div style={{ background: "#ffffcc", borderBottom: "1px solid #ffcc00", padding: "8px 0" }}>
-        <marquee style={{ color: "#cc0000", fontWeight: "bold", fontSize: "14px" }} scrollamount="4">
+      {/* Scrolling Marquee using CSS */}
+      <div style={{ background: "#ffffcc", borderBottom: "1px solid #ffcc00", padding: "8px 0", overflow: "hidden", whiteSpace: "nowrap" }}>
+        <div className="marquee-content" style={{ color: "#cc0000", fontWeight: "bold", fontSize: "14px", display: "inline-block" }}>
           🔥 {newUpdates.map(j => `* ${j.title} (${j.organization}) * `).join(" | ")} 🔥
-        </marquee>
+        </div>
       </div>
 
       <div className="container" style={{ display: "flex", gap: "20px", marginTop: "20px", paddingBottom: "40px" }}>
