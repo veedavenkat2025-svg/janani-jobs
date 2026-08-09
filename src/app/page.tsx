@@ -1,56 +1,58 @@
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import FeedPreferences from "@/components/FeedPreferences";
 
-export const revalidate = 60; // Cache page for 60 seconds
+export const revalidate = 0; // Dynamic route so preferences load fresh
 
 // This is a Server Component, we can fetch data directly!
 export default async function Home() {
+  const session = await getServerSession(authOptions);
+  
+  let jobPref = "ALL";
+  let statePref = null;
+  
+  if (session?.user?.email) {
+    const dbUser = await prisma.user.findUnique({
+      where: { email: session.user.email },
+      select: { jobPreference: true, statePreference: true }
+    });
+    if (dbUser) {
+      jobPref = dbUser.jobPreference || "ALL";
+      statePref = dbUser.statePreference;
+    }
+  }
+
+  const whereClause: any = {};
+  if (jobPref !== "ALL") {
+    whereClause.type = jobPref;
+  }
+  
+  // State logic: If statePref is set, we show jobs that are in that state OR 'Central' (All-India)
+  if (statePref && statePref !== "All India") {
+    whereClause.OR = [
+      { state: statePref },
+      { state: "Central" },
+      { state: null } // Fallback for old jobs
+    ];
+  }
+
   const jobs = await prisma.job.findMany({
+    where: whereClause,
     orderBy: { postedAt: "desc" },
-    take: 10,
+    take: 50, // Fetch more for the tables
   });
 
-  // Mock jobs if database is empty for visual testing
-  const displayJobs = jobs.length > 0 ? jobs : [
-    {
-      id: "1",
-      title: "SSC CGL (Combined Graduate Level) Examination 2026",
-      organization: "Staff Selection Commission (SSC)",
-      type: "GOVERNMENT",
-      location: "All India",
-      description: "Recruitment for various Group B and Group C posts in various Ministries/ Departments/ Organizations of Government of India.",
-      salary: "₹47,600 - ₹1,51,100",
-      deadline: new Date("2026-09-15"),
-    },
-    {
-      id: "2",
-      title: "Senior Frontend Engineer (React/Next.js)",
-      organization: "TechNova Solutions",
-      type: "PRIVATE",
-      location: "Bangalore (Remote)",
-      description: "Looking for an experienced frontend engineer to lead the development of our flagship product.",
-      salary: "₹18,00,000 - ₹25,00,000",
-      deadline: new Date("2026-08-30"),
-    },
-    {
-      id: "3",
-      title: "IBPS PO (Probationary Officer) - 2026",
-      organization: "Institute of Banking Personnel Selection",
-      type: "GOVERNMENT",
-      location: "All India",
-      description: "Recruitment of Probationary Officers/ Management Trainees in Participating Banks.",
-      salary: "₹52,000 - ₹55,000",
-      deadline: new Date("2026-10-01"),
-    }
-  ];
+  // Categorize jobs for the 3-column layout
+  const newUpdates = jobs.filter(j => j.category === "NEW_UPDATE");
+  const admitCards = jobs.filter(j => j.category === "ADMIT_CARD");
+  const results = jobs.filter(j => j.category === "RESULT");
 
   return (
     <main>
       {/* Hero Section */}
-      <section style={{ padding: "4rem 0 6rem 0", textAlign: "center", position: "relative", overflow: "hidden" }}>
-        
-        {/* Animated Background Elements */}
+      <section style={{ padding: "4rem 0 3rem 0", textAlign: "center", position: "relative", overflow: "hidden" }}>
         <div style={{ position: "absolute", top: "10%", left: "20%", width: "300px", height: "300px", background: "var(--color-primary)", filter: "blur(100px)", opacity: 0.15, borderRadius: "50%", zIndex: -1 }} className="animate-float"></div>
         <div style={{ position: "absolute", bottom: "10%", right: "20%", width: "250px", height: "250px", background: "var(--color-secondary)", filter: "blur(100px)", opacity: 0.15, borderRadius: "50%", zIndex: -1, animationDelay: "2s" }} className="animate-float"></div>
 
@@ -61,123 +63,97 @@ export default async function Home() {
           <p style={{ fontSize: "clamp(1rem, 4vw, 1.25rem)", color: "var(--text-muted)", maxWidth: "600px", margin: "0 auto 3rem auto" }}>
             The ultimate platform for Sarkari Naukri, Private Sector Roles, and Career Guidance. Curated specifically for the youth.
           </p>
-          <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
-            <Link href="/jobs" className="btn btn-primary pulse-button" style={{ fontSize: '1.25rem', padding: '1rem 2rem' }}>
-              Explore Live Jobs
-            </Link>
-            <Link href="/exam-prep" className="btn btn-secondary" style={{ fontSize: '1.25rem', padding: '1rem 2rem' }}>
-              Mock Tests
-            </Link>
-          </div>
-        </div>
-
-        {/* Emotion: Live Success Stories Marquee */}
-        <div style={{ width: '100%', overflow: 'hidden', marginTop: '4rem', padding: '1rem 0', background: 'var(--bg-subtle)', borderTop: '1px solid var(--border-color)', borderBottom: '1px solid var(--border-color)' }}>
-          <div style={{ display: 'flex', gap: '2rem', whiteSpace: 'nowrap', animation: 'marquee 25s linear infinite' }}>
-            <span style={{ fontSize: '1.1rem', color: 'var(--color-primary)' }}>✨ Rahul from Delhi just passed the SSC CGL Mock Test!</span>
-            <span style={{ fontSize: '1.1rem', color: 'var(--color-secondary)' }}>🚀 Priya from Bangalore applied for a Private Tech Role!</span>
-            <span style={{ fontSize: '1.1rem', color: 'var(--color-success)' }}>🎉 Amit from Mumbai generated his AI Resume!</span>
-            <span style={{ fontSize: '1.1rem', color: 'var(--color-primary)' }}>✨ Neha from Pune saved a UPSC Notification!</span>
-            {/* Duplicate for infinite loop illusion */}
-            <span style={{ fontSize: '1.1rem', color: 'var(--color-primary)' }}>✨ Rahul from Delhi just passed the SSC CGL Mock Test!</span>
-            <span style={{ fontSize: '1.1rem', color: 'var(--color-secondary)' }}>🚀 Priya from Bangalore applied for a Private Tech Role!</span>
-          </div>
-        </div>
-
-        {/* CSS for Marquee inline for simplicity */}
-        <style dangerouslySetInnerHTML={{__html: `
-          @keyframes marquee {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
-          }
-        `}} />
-      </section>
-
-      {/* Quick Actions / Featured Categories */}
-      <section className="container" style={{ padding: "2rem 0" }}>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "1.5rem" }}>
-          
-          <div className="card animate-float" style={{ textAlign: "center", border: "1px solid var(--border-color)", background: "linear-gradient(180deg, rgba(0, 229, 255, 0.05) 0%, transparent 100%)" }}>
-            <div style={{ fontSize: "3rem", marginBottom: "1rem" }}>🏛️</div>
-            <h3 style={{ fontSize: "1.5rem", marginBottom: "0.5rem", color: "var(--color-primary)" }}>Govt Jobs</h3>
-            <p style={{ color: "var(--text-muted)", marginBottom: "1.5rem", fontSize: "0.9rem" }}>SSC, UPSC, Banking & more. Verified daily.</p>
-            <Link href="/govt-exams" className="btn btn-secondary" style={{ width: "100%", borderRadius: "12px" }}>Explore Now</Link>
-          </div>
-          
-          <div className="card animate-float" style={{ textAlign: "center", border: "1px solid var(--border-color)", background: "linear-gradient(180deg, rgba(112, 0, 255, 0.05) 0%, transparent 100%)", animationDelay: "1s" }}>
-            <div style={{ fontSize: "3rem", marginBottom: "1rem" }}>✨</div>
-            <h3 style={{ fontSize: "1.5rem", marginBottom: "0.5rem", color: "var(--color-secondary)" }}>Career Finder</h3>
-            <p style={{ color: "var(--text-muted)", marginBottom: "1.5rem", fontSize: "0.9rem" }}>Not sure where to start? Take the 2-min quiz.</p>
-            <Link href="/career-finder" className="btn btn-secondary" style={{ width: "100%", borderRadius: "12px" }}>Start Quiz</Link>
-          </div>
-
-          <div className="card animate-float" style={{ textAlign: "center", border: "1px solid var(--border-color)", background: "linear-gradient(180deg, rgba(245, 158, 11, 0.05) 0%, transparent 100%)", animationDelay: "2s" }}>
-            <div style={{ fontSize: "3rem", marginBottom: "1rem" }}>📝</div>
-            <h3 style={{ fontSize: "1.5rem", marginBottom: "0.5rem", color: "#f59e0b" }}>Resume AI</h3>
-            <p style={{ color: "var(--text-muted)", marginBottom: "1.5rem", fontSize: "0.9rem" }}>Build a resume that actually gets you hired.</p>
-            <Link href="/resume-builder" className="btn btn-secondary" style={{ width: "100%", borderRadius: "12px" }}>Build Yours</Link>
-          </div>
-
         </div>
       </section>
 
-      {/* Latest Jobs Section */}
-      <section className="container" style={{ padding: "4rem 0" }}>
-        <div className="flex items-center justify-between" style={{ marginBottom: "2rem" }}>
-          <h2 style={{ fontSize: "clamp(1.8rem, 5vw, 2.5rem)" }}>New Drops ⚡</h2>
-          <Link href="/jobs" style={{ color: "var(--color-primary)", fontWeight: 800 }}>View All →</Link>
-        </div>
+      {/* Preferences Section */}
+      <section className="container">
+        {session ? (
+          <FeedPreferences initialJobPref={jobPref} initialStatePref={statePref} />
+        ) : (
+          <div style={{ marginBottom: "2rem", padding: "1rem", background: "rgba(255,255,255,0.05)", borderRadius: "12px", textAlign: "center" }}>
+            <p style={{ color: "var(--text-muted)", fontSize: "0.9rem" }}>
+              <Link href="/login" style={{ color: "var(--color-primary)", fontWeight: 700 }}>Log in</Link> to personalize this feed to your exact State and Job preference!
+            </p>
+          </div>
+        )}
+      </section>
 
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))", gap: "1.5rem" }}>
-          {displayJobs.map((job) => (
-            <div key={job.id} className="card flex flex-col justify-between" style={{ minHeight: "240px", position: "relative", overflow: "hidden", padding: "1.25rem" }}>
-              <div style={{
-                position: "absolute",
-                top: "-30px",
-                right: "-30px",
-                width: "120px",
-                height: "120px",
-                background: job.type === 'GOVERNMENT' ? "var(--color-primary)" : "var(--color-secondary)",
-                filter: "blur(60px)",
-                opacity: 0.1,
-                zIndex: 0
-              }}></div>
-
-              <div style={{ zIndex: 1 }}>
-                <div className="flex items-center justify-between" style={{ marginBottom: "1.25rem" }}>
-                  <span style={{ 
-                    padding: "0.25rem 0.6rem",
-                    borderRadius: "8px",
-                    fontSize: "0.7rem",
-                    fontWeight: 800,
-                    background: job.type === 'GOVERNMENT' ? "rgba(0, 229, 255, 0.15)" : "rgba(112, 0, 255, 0.15)",
-                    color: job.type === 'GOVERNMENT' ? "var(--color-primary)" : "#d1a3ff",
-                    border: `1px solid ${job.type === 'GOVERNMENT' ? "rgba(0, 229, 255, 0.2)" : "rgba(112, 0, 255, 0.2)"}`
-                  }}>
-                    {job.type === 'GOVERNMENT' ? '🏛️ Govt' : '🚀 Private'}
-                  </span>
-                  <span style={{ fontSize: "0.7rem", color: "var(--text-muted)", fontWeight: 700 }}>
-                    #{job.id.slice(0, 4)}
-                  </span>
-                </div>
-                
-                <h3 style={{ fontSize: "1.4rem", marginBottom: "0.4rem", fontWeight: 800 }}>{job.title}</h3>
-                <p style={{ color: "var(--text-muted)", fontWeight: 600, fontSize: "0.95rem", marginBottom: "0.8rem" }}>
-                  @{job.organization}
-                </p>
-                <div style={{ display: "flex", gap: "0.5rem", marginBottom: "1rem" }}>
-                   <span style={{ fontSize: "0.7rem", opacity: 0.7 }}>📍 {job.location || 'India'}</span>
-                   <span style={{ fontSize: "0.7rem", opacity: 0.7 }}>🕒 Full-time</span>
-                </div>
-              </div>
-              
-              <div className="flex items-center justify-between" style={{ marginTop: "auto", paddingTop: "1rem", borderTop: "1px solid var(--border-color)", zIndex: 1 }}>
-                <span style={{ fontWeight: 800, fontSize: "1.1rem", color: "var(--color-primary)" }}>{job.salary || '💰 TBD'}</span>
-                <Link href={`/jobs/${job.id}`} className="btn btn-primary" style={{ padding: "0.6rem 1.2rem", fontSize: "0.85rem", borderRadius: "10px", fontWeight: 800 }}>
-                  Apply Now
-                </Link>
-              </div>
+      {/* FreeJobAlert Style 3-Column Layout */}
+      <section className="container" style={{ padding: "1rem 0 4rem 0" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "1.5rem" }}>
+          
+          {/* Column 1: New Updates */}
+          <div style={{ background: "var(--bg-card)", border: "1px solid var(--border-color)", borderRadius: "12px", overflow: "hidden" }}>
+            <div style={{ background: "var(--color-primary)", color: "#000", padding: "1rem", textAlign: "center", fontWeight: 800, fontSize: "1.2rem" }}>
+              📢 Latest Notifications
             </div>
+            <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
+              {newUpdates.length > 0 ? newUpdates.slice(0, 15).map(job => (
+                <li key={job.id} style={{ borderBottom: "1px solid var(--border-color)" }}>
+                  <Link href={`/jobs/${job.id}`} style={{ display: "block", padding: "0.8rem 1rem", fontSize: "0.95rem", color: "var(--text-main)", transition: "background 0.2s" }} className="hover:bg-white/5">
+                    <span style={{ color: "var(--color-primary)", marginRight: "0.5rem" }}>▪</span>
+                    {job.title} - <span style={{ opacity: 0.7, fontSize: "0.85rem" }}>{job.organization}</span>
+                  </Link>
+                </li>
+              )) : (
+                <li style={{ padding: "1rem", textAlign: "center", color: "var(--text-muted)", fontSize: "0.9rem" }}>No new updates found.</li>
+              )}
+            </ul>
+            <div style={{ padding: "1rem", textAlign: "center", background: "rgba(0,0,0,0.2)" }}>
+              <Link href="/jobs?category=NEW_UPDATE" style={{ color: "var(--color-primary)", fontWeight: 700, fontSize: "0.9rem" }}>View More Updates →</Link>
+            </div>
+          </div>
+
+          {/* Column 2: Admit Cards */}
+          <div style={{ background: "var(--bg-card)", border: "1px solid var(--border-color)", borderRadius: "12px", overflow: "hidden" }}>
+            <div style={{ background: "var(--color-secondary)", color: "#000", padding: "1rem", textAlign: "center", fontWeight: 800, fontSize: "1.2rem" }}>
+              🎫 Admit Cards
+            </div>
+            <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
+              {admitCards.length > 0 ? admitCards.slice(0, 15).map(job => (
+                <li key={job.id} style={{ borderBottom: "1px solid var(--border-color)" }}>
+                  <Link href={`/jobs/${job.id}`} style={{ display: "block", padding: "0.8rem 1rem", fontSize: "0.95rem", color: "var(--text-main)", transition: "background 0.2s" }} className="hover:bg-white/5">
+                    <span style={{ color: "var(--color-secondary)", marginRight: "0.5rem" }}>▪</span>
+                    {job.title} - <span style={{ opacity: 0.7, fontSize: "0.85rem" }}>{job.organization}</span>
+                  </Link>
+                </li>
+              )) : (
+                <li style={{ padding: "1rem", textAlign: "center", color: "var(--text-muted)", fontSize: "0.9rem" }}>No admit cards available.</li>
+              )}
+            </ul>
+            <div style={{ padding: "1rem", textAlign: "center", background: "rgba(0,0,0,0.2)" }}>
+              <Link href="/jobs?category=ADMIT_CARD" style={{ color: "var(--color-secondary)", fontWeight: 700, fontSize: "0.9rem" }}>View More Admit Cards →</Link>
+            </div>
+          </div>
+
+          {/* Column 3: Results */}
+          <div style={{ background: "var(--bg-card)", border: "1px solid var(--border-color)", borderRadius: "12px", overflow: "hidden" }}>
+            <div style={{ background: "#f59e0b", color: "#000", padding: "1rem", textAlign: "center", fontWeight: 800, fontSize: "1.2rem" }}>
+              🏆 Results
+            </div>
+            <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
+              {results.length > 0 ? results.slice(0, 15).map(job => (
+                <li key={job.id} style={{ borderBottom: "1px solid var(--border-color)" }}>
+                  <Link href={`/jobs/${job.id}`} style={{ display: "block", padding: "0.8rem 1rem", fontSize: "0.95rem", color: "var(--text-main)", transition: "background 0.2s" }} className="hover:bg-white/5">
+                    <span style={{ color: "#f59e0b", marginRight: "0.5rem" }}>▪</span>
+                    {job.title} - <span style={{ opacity: 0.7, fontSize: "0.85rem" }}>{job.organization}</span>
+                  </Link>
+                </li>
+              )) : (
+                <li style={{ padding: "1rem", textAlign: "center", color: "var(--text-muted)", fontSize: "0.9rem" }}>No results available.</li>
+              )}
+            </ul>
+            <div style={{ padding: "1rem", textAlign: "center", background: "rgba(0,0,0,0.2)" }}>
+              <Link href="/jobs?category=RESULT" style={{ color: "#f59e0b", fontWeight: 700, fontSize: "0.9rem" }}>View More Results →</Link>
+            </div>
+          </div>
+
+        </div>
+      </section>
+    </main>
+  );
+}>
           ))}
         </div>
       </section>

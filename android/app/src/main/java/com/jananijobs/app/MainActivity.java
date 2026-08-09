@@ -45,10 +45,6 @@ public class MainActivity extends BridgeActivity {
             // Speed up rendering
             webView.setLayerType(android.view.View.LAYER_TYPE_HARDWARE, null);
             
-            // Optimization for remote URLs
-            settings.setRenderPriority(WebSettings.RenderPriority.HIGH);
-            settings.setEnableSmoothTransition(true);
-            
             // Additional Performance Boosters
             settings.setAllowContentAccess(true);
             settings.setSaveFormData(true);

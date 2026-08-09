@@ -4,11 +4,12 @@ import { redirect } from "next/navigation";
 
 export const revalidate = 60; // Cache page for 60 seconds (eliminates DB lag)
 
-export default async function JobsPage(props: { searchParams: Promise<{ q?: string, type?: string, location?: string, sort?: string }> }) {
+export default async function JobsPage(props: { searchParams: Promise<{ q?: string, type?: string, location?: string, sort?: string, state?: string }> }) {
   const searchParams = await props.searchParams;
   const query = searchParams?.q || "";
   const typeFilter = searchParams?.type || "ALL";
   const locationFilter = searchParams?.location || "ALL";
+  const stateFilter = searchParams?.state || "ALL";
   const sortFilter = searchParams?.sort || "newest";
 
   // Build the Prisma query dynamically
@@ -28,6 +29,10 @@ export default async function JobsPage(props: { searchParams: Promise<{ q?: stri
 
   if (locationFilter === "Remote") {
     whereClause.location = { contains: "Remote", mode: "insensitive" };
+  }
+
+  if (stateFilter !== "ALL") {
+    whereClause.OR = whereClause.OR ? [...whereClause.OR, { state: stateFilter }, { state: "Central" }] : [{ state: stateFilter }, { state: "Central" }, { state: null }];
   }
 
   const orderBy: any = {};

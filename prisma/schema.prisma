@@ -15,9 +15,12 @@ model Job {
   title        String
   organization String
   type         String    // 'GOVERNMENT' or 'PRIVATE'
+  category     String    @default("NEW_UPDATE") // 'NEW_UPDATE', 'ADMIT_CARD', 'RESULT'
   location     String?
+  state        String?   // Indian State or 'Central' for All-India
   description  String
   applyUrl     String
+  sourceUrl    String?   // Link to the official govt website it was scraped from
   salary       String?
   qualification String?  // e.g., '10th Pass', '12th Pass', 'Graduation'
   deadline     DateTime?
@@ -95,6 +98,8 @@ model User {
   password      String?
   qualification String?   // e.g., '10th Pass', '12th Pass', 'Graduation'
   role          String    @default("USER") // 'USER' or 'ADMIN'
+  jobPreference String    @default("ALL")  // 'ALL', 'GOVERNMENT', 'PRIVATE'
+  statePreference String? // e.g., 'Telangana', 'All India'
   accounts      Account[]
   sessions      Session[]
   savedJobs     SavedJob[]
