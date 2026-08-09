@@ -6,30 +6,30 @@
 .gap-4 { gap: 1rem; }
 
 :root {
-  /* Cyber Forest Theme - High-End Greenish UI */
-  --bg-main: #020403; /* Near black forest */
-  --bg-surface: #0a0f0d;
-  --bg-card: rgba(15, 23, 20, 0.7);
-  --bg-subtle: rgba(0, 255, 148, 0.03);
+  /* Classic FreeJobAlert Theme */
+  --bg-main: #ffffff; 
+  --bg-surface: #f8f9fa;
+  --bg-card: #ffffff;
+  --bg-subtle: #f1f5f9;
   
-  --color-primary: #00FF94; /* Vibrant Emerald */
-  --color-primary-dark: #00CC76;
-  --color-primary-glow: rgba(0, 255, 148, 0.3);
+  --color-primary: #004085; /* Classic Sarkari Blue */
+  --color-primary-dark: #002752;
+  --color-primary-glow: rgba(0, 64, 133, 0.1);
   
-  --color-accent: #CCFF00; /* Neon Lime - for "Genzhi" energy */
-  --color-accent-glow: rgba(204, 255, 0, 0.3);
+  --color-accent: #dc3545; /* Urgent Red */
+  --color-accent-glow: rgba(220, 53, 69, 0.1);
   
-  --color-secondary: #8CFFD1;
-  --text-main: #E0E4DF;
-  --text-muted: #94A399;
+  --color-secondary: #17a2b8;
+  --text-main: #212529; /* Dark text on white bg */
+  --text-muted: #495057;
 
-  --border-color: rgba(0, 255, 148, 0.1);
-  --glass-border: rgba(255, 255, 255, 0.05);
+  --border-color: #dee2e6;
+  --glass-border: #e9ecef;
 
-  --font-family: var(--font-plus-jakarta-sans), 'Inter', system-ui, sans-serif;
-  --radius-l: 24px;
-  --radius-m: 16px;
-  --radius-s: 12px;
+  --font-family: Arial, Helvetica, sans-serif; /* Dense, classic font */
+  --radius-l: 0px; /* Classic sharp corners */
+  --radius-m: 4px;
+  --radius-s: 2px;
 }
 
 * {
@@ -43,101 +43,65 @@ body {
   background-color: var(--bg-main);
   color: var(--text-main);
   font-family: var(--font-family);
-  line-height: 1.6;
+  line-height: 1.4; /* Tighter line height for density */
   overflow-x: hidden;
-  /* Subtle Green Gradient Mesh */
-  background-image: 
-    radial-gradient(circle at 0% 0%, rgba(0, 255, 148, 0.05) 0%, transparent 40%),
-    radial-gradient(circle at 100% 100%, rgba(204, 255, 0, 0.03) 0%, transparent 40%);
-  background-attachment: fixed;
 }
 
-/* Glassmorphism Navigation */
+/* Classic Navigation */
 .glass-nav {
-  background: rgba(2, 4, 3, 0.8);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid var(--border-color);
+  background: var(--color-primary);
+  color: #fff;
+  border-bottom: 2px solid var(--color-accent);
   position: sticky;
   top: 0;
   z-index: 1000;
-  padding: 0.75rem 1rem;
+  padding: 0.5rem 1rem;
 }
 
-/* Attractive Genzhi Cards */
+/* Classic Cards/Tables */
 .card {
   background: var(--bg-card);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-l);
-  padding: 1.5rem;
-  transition: all 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
-  position: relative;
-  overflow: hidden;
-}
-
-.card::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: linear-gradient(135deg, rgba(0, 255, 148, 0.05), transparent);
-  opacity: 0;
-  transition: opacity 0.5s ease;
-  pointer-events: none;
-}
-
-.card:hover {
-  transform: translateY(-8px) scale(1.02);
-  border-color: var(--color-primary);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4),
-              0 0 20px var(--color-primary-glow);
-}
-
-.card:hover::before {
-  opacity: 1;
+  border: 1px solid var(--border-color);
+  padding: 1rem;
+  margin-bottom: 1rem;
 }
 
 /* Interactive Buttons */
 .btn {
-  padding: 0.8rem 1.8rem;
+  padding: 0.4rem 0.8rem;
   border-radius: var(--radius-m);
   font-weight: 700;
-  letter-spacing: -0.01em;
-  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
   cursor: pointer;
-  border: none;
-  display: flex;
+  border: 1px solid transparent;
+  display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 4px;
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
-  color: #020403;
-  box-shadow: 0 8px 20px var(--color-primary-glow);
+  background: var(--color-primary);
+  color: #fff;
 }
 
-.btn-primary:active {
-  transform: scale(0.95);
+.btn-primary:hover {
+  background: var(--color-primary-dark);
 }
 
 .btn-accent {
   background: var(--color-accent);
-  color: #020403;
-  box-shadow: 0 8px 20px var(--color-accent-glow);
+  color: #fff;
 }
 
 /* Typography */
 h1, h2, h3 {
-  color: #FFFFFF;
-  letter-spacing: -0.03em;
+  color: var(--color-primary);
+  margin-bottom: 0.5rem;
 }
 
 .text-gradient {
-  background: linear-gradient(to right, var(--color-primary), var(--color-accent));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: var(--color-accent); /* Remove gradient, just make it red */
 }
 
 /* Scrollbar Styling */
