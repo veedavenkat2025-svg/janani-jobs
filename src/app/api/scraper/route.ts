@@ -70,8 +70,63 @@ export async function GET(request: Request) {
       console.error("UPSC Scrape failed", e);
     }
 
-    // Limit to 10 latest updates per run to avoid spamming the DB
-    const jobsToInsert = scrapedJobs.slice(0, 10);
+    // 3. Scrape APPSC (Andhra Pradesh Public Service Commission)
+    try {
+      const appscResponse = await fetch('https://psc.ap.gov.in/', { next: { revalidate: 0 } });
+      const appscHtml = await appscResponse.text();
+      const $appsc = cheerio.load(appscHtml);
+      
+      // Look for marquee or news links (Generic approach for APPSC)
+      $appsc('a').each((i, el) => {
+        const text = $appsc(el).text().trim();
+        const href = $appsc(el).attr('href');
+        
+        if (text && text.toLowerCase().includes('notification') && href) {
+          scrapedJobs.push({
+            title: `APPSC: ${text.substring(0, 100)}`,
+            organization: 'Andhra Pradesh Public Service Commission (APPSC)',
+            type: 'GOVERNMENT',
+            category: 'NEW_UPDATE',
+            location: 'Andhra Pradesh',
+            state: 'Andhra Pradesh',
+            qualification: 'Check Notification',
+            applyUrl: href.startsWith('http') ? href : `https://psc.ap.gov.in${href.startsWith('/') ? href : '/' + href}`,
+          });
+        }
+      });
+    } catch (e) {
+      console.error("APPSC Scrape failed", e);
+    }
+
+    // 4. Scrape TGPSC (Telangana State Public Service Commission)
+    try {
+      const tspscResponse = await fetch('https://tspsc.gov.in/', { next: { revalidate: 0 } });
+      const tspscHtml = await tspscResponse.text();
+      const $tspsc = cheerio.load(tspscHtml);
+      
+      $tspsc('a').each((i, el) => {
+        const text = $tspsc(el).text().trim();
+        const href = $tspsc(el).attr('href');
+        
+        if (text && text.toLowerCase().includes('notification') && href) {
+          scrapedJobs.push({
+            title: `TGPSC: ${text.substring(0, 100)}`,
+            organization: 'Telangana State Public Service Commission (TGPSC)',
+            type: 'GOVERNMENT',
+            category: 'NEW_UPDATE',
+            location: 'Telangana',
+            state: 'Telangana',
+            qualification: 'Check Notification',
+            applyUrl: href.startsWith('http') ? href : `https://tspsc.gov.in${href.startsWith('/') ? href : '/' + href}`,
+          });
+        }
+      });
+    } catch (e) {
+      console.error("TSPSC Scrape failed", e);
+    }
+
+    // Limit to 20 latest updates per run to avoid spamming the DB
+    const jobsToInsert = scrapedJobs.slice(0, 20);
     let insertedCount = 0;
 
     // Insert into Neon Database (checking for duplicates via title)
