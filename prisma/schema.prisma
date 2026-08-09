@@ -100,6 +100,7 @@ model User {
   role          String    @default("USER") // 'USER' or 'ADMIN'
   jobPreference String    @default("ALL")  // 'ALL', 'GOVERNMENT', 'PRIVATE'
   statePreference String? // e.g., 'Telangana', 'All India'
+  qualificationPref String? // e.g., '10th Pass', 'Any Degree'
   accounts      Account[]
   sessions      Session[]
   savedJobs     SavedJob[]

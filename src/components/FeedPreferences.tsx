@@ -6,7 +6,18 @@ import { useRouter } from "next/navigation";
 interface FeedPreferencesProps {
   initialJobPref: string;
   initialStatePref: string | null;
+  initialQualPref: string | null;
 }
+
+const QUALIFICATIONS = [
+  "Any Qualification",
+  "10th Pass",
+  "12th Pass",
+  "ITI / Diploma",
+  "Graduation (Any Degree)",
+  "B.Tech / B.E.",
+  "Post Graduation",
+];
 
 const INDIAN_STATES = [
   "All India",
@@ -41,13 +52,14 @@ const INDIAN_STATES = [
   "West Bengal",
 ];
 
-export default function FeedPreferences({ initialJobPref, initialStatePref }: FeedPreferencesProps) {
+export default function FeedPreferences({ initialJobPref, initialStatePref, initialQualPref }: FeedPreferencesProps) {
   const router = useRouter();
   const [jobPref, setJobPref] = useState(initialJobPref || "ALL");
   const [statePref, setStatePref] = useState(initialStatePref || "All India");
+  const [qualPref, setQualPref] = useState(initialQualPref || "Any Qualification");
   const [loading, setLoading] = useState(false);
 
-  const updatePreference = async (newJobPref: string, newStatePref: string) => {
+  const updatePreference = async (newJobPref: string, newStatePref: string, newQualPref: string) => {
     setLoading(true);
     try {
       const res = await fetch("/api/user/preference", {
@@ -56,6 +68,7 @@ export default function FeedPreferences({ initialJobPref, initialStatePref }: Fe
         body: JSON.stringify({
           jobPreference: newJobPref,
           statePreference: newStatePref === "All India" ? null : newStatePref,
+          qualificationPref: newQualPref === "Any Qualification" ? null : newQualPref,
         }),
       });
 
@@ -71,13 +84,19 @@ export default function FeedPreferences({ initialJobPref, initialStatePref }: Fe
 
   const handleJobPrefChange = (pref: string) => {
     setJobPref(pref);
-    updatePreference(pref, statePref);
+    updatePreference(pref, statePref, qualPref);
   };
 
   const handleStatePrefChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newVal = e.target.value;
     setStatePref(newVal);
-    updatePreference(jobPref, newVal);
+    updatePreference(jobPref, newVal, qualPref);
+  };
+
+  const handleQualPrefChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const newVal = e.target.value;
+    setQualPref(newVal);
+    updatePreference(jobPref, statePref, newVal);
   };
 
   return (
@@ -123,6 +142,20 @@ export default function FeedPreferences({ initialJobPref, initialStatePref }: Fe
             ))}
           </select>
         </div>
+        {/* Qualification Dropdown */}
+        <div style={{ flex: "1 1 200px" }}>
+          <select 
+            value={qualPref}
+            onChange={handleQualPrefChange}
+            disabled={loading}
+            style={{ width: "100%", padding: "0.8rem 1rem", borderRadius: "12px", background: "var(--bg-card)", color: "var(--text-main)", border: "1px solid var(--border-color)", outline: "none", cursor: "pointer", fontSize: "1rem" }}
+          >
+            {QUALIFICATIONS.map((qual) => (
+              <option key={qual} value={qual}>{qual === "Any Qualification" ? "🎓 Any Qualification" : `🎓 ${qual}`}</option>
+            ))}
+          </select>
+        </div>
+
       </div>
       {loading && <p style={{ color: "var(--text-muted)", fontSize: "0.85rem", marginTop: "1rem" }}>Updating feed...</p>}
     </div>

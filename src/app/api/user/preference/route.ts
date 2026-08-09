@@ -12,11 +12,12 @@ export async function PATCH(req: Request) {
     }
 
     const body = await req.json();
-    const { jobPreference, statePreference } = body;
+    const { jobPreference, statePreference, qualificationPref } = body;
 
     const dataToUpdate: any = {};
     if (jobPreference !== undefined) dataToUpdate.jobPreference = jobPreference;
     if (statePreference !== undefined) dataToUpdate.statePreference = statePreference;
+    if (qualificationPref !== undefined) dataToUpdate.qualificationPref = qualificationPref;
 
     if (Object.keys(dataToUpdate).length === 0) {
       return NextResponse.json({ error: "No data provided" }, { status: 400 });

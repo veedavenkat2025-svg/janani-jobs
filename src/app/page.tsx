@@ -12,15 +12,17 @@ export default async function Home() {
   
   let jobPref = "ALL";
   let statePref = null;
+  let qualPref = null;
   
   if (session?.user?.email) {
     const dbUser = await prisma.user.findUnique({
       where: { email: session.user.email },
-      select: { jobPreference: true, statePreference: true }
+      select: { jobPreference: true, statePreference: true, qualificationPref: true }
     });
     if (dbUser) {
       jobPref = dbUser.jobPreference || "ALL";
       statePref = dbUser.statePreference;
+      qualPref = dbUser.qualificationPref;
     }
   }
 
@@ -38,16 +40,76 @@ export default async function Home() {
     ];
   }
 
+  if (qualPref && qualPref !== "Any Qualification") {
+    whereClause.qualification = { contains: qualPref, mode: "insensitive" };
+  }
+
   const jobs = await prisma.job.findMany({
     where: whereClause,
     orderBy: { postedAt: "desc" },
     take: 50, // Fetch more for the tables
   });
 
+  // Mock jobs if database is empty for visual testing
+  const displayJobs = jobs.length > 0 ? jobs : [
+    {
+      id: "1",
+      title: "SSC CGL (Combined Graduate Level) Examination 2026",
+      organization: "Staff Selection Commission (SSC)",
+      type: "GOVERNMENT",
+      category: "NEW_UPDATE",
+      location: "All India",
+      state: "Central",
+      description: "Recruitment for various Group B and Group C posts in various Ministries/ Departments/ Organizations of Government of India.",
+      salary: "₹47,600 - ₹1,51,100",
+      deadline: new Date(Date.now() + 172800000), // 2 days from now
+      qualification: "Graduation (Any Degree)",
+    },
+    {
+      id: "2",
+      title: "Senior Frontend Engineer (React/Next.js)",
+      organization: "TechNova Solutions",
+      type: "PRIVATE",
+      category: "NEW_UPDATE",
+      location: "Bangalore (Remote)",
+      state: "Karnataka",
+      description: "Looking for an experienced frontend engineer to lead the development of our flagship product.",
+      salary: "₹18,00,000 - ₹25,00,000",
+      deadline: new Date(Date.now() + 864000000), // 10 days
+      qualification: "B.Tech / B.E.",
+    },
+    {
+      id: "3",
+      title: "IBPS PO (Probationary Officer) Admit Card Download",
+      organization: "Institute of Banking Personnel Selection",
+      type: "GOVERNMENT",
+      category: "ADMIT_CARD",
+      location: "All India",
+      state: "Central",
+      description: "Admit cards are now available for download.",
+      salary: null,
+      deadline: null,
+      qualification: "Graduation (Any Degree)",
+    },
+    {
+      id: "4",
+      title: "UPSC Civil Services Prelims Result 2026",
+      organization: "Union Public Service Commission",
+      type: "GOVERNMENT",
+      category: "RESULT",
+      location: "All India",
+      state: "Central",
+      description: "Results for the 2026 Civil Services Prelims.",
+      salary: null,
+      deadline: null,
+      qualification: "Graduation (Any Degree)",
+    }
+  ];
+
   // Categorize jobs for the 3-column layout
-  const newUpdates = jobs.filter(j => j.category === "NEW_UPDATE");
-  const admitCards = jobs.filter(j => j.category === "ADMIT_CARD");
-  const results = jobs.filter(j => j.category === "RESULT");
+  const newUpdates = displayJobs.filter(j => j.category === "NEW_UPDATE");
+  const admitCards = displayJobs.filter(j => j.category === "ADMIT_CARD");
+  const results = displayJobs.filter(j => j.category === "RESULT");
 
   return (
     <main>
@@ -69,7 +131,7 @@ export default async function Home() {
       {/* Preferences Section */}
       <section className="container">
         {session ? (
-          <FeedPreferences initialJobPref={jobPref} initialStatePref={statePref} />
+          <FeedPreferences initialJobPref={jobPref} initialStatePref={statePref} initialQualPref={qualPref} />
         ) : (
           <div style={{ marginBottom: "2rem", padding: "1rem", background: "rgba(255,255,255,0.05)", borderRadius: "12px", textAlign: "center" }}>
             <p style={{ color: "var(--text-muted)", fontSize: "0.9rem" }}>
@@ -90,11 +152,32 @@ export default async function Home() {
             </div>
             <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
               {newUpdates.length > 0 ? newUpdates.slice(0, 15).map(job => (
-                <li key={job.id} style={{ borderBottom: "1px solid var(--border-color)" }}>
-                  <Link href={`/jobs/${job.id}`} style={{ display: "block", padding: "0.8rem 1rem", fontSize: "0.95rem", color: "var(--text-main)", transition: "background 0.2s" }} className="hover:bg-white/5">
-                    <span style={{ color: "var(--color-primary)", marginRight: "0.5rem" }}>▪</span>
-                    {job.title} - <span style={{ opacity: 0.7, fontSize: "0.85rem" }}>{job.organization}</span>
-                  </Link>
+                <li key={job.id} style={{ borderBottom: "1px solid var(--border-color)", padding: "1rem", display: "flex", flexDirection: "column", gap: "0.5rem" }} className="hover:bg-white/5 transition-colors">
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+                    <Link href={`/jobs/${job.id}`} style={{ fontWeight: 700, fontSize: "1rem", color: "var(--text-main)", textDecoration: "none" }}>
+                      <span style={{ color: "var(--color-primary)", marginRight: "0.5rem" }}>▪</span>
+                      {job.title}
+                    </Link>
+                    {job.deadline && (
+                      <span style={{ fontSize: "0.75rem", fontWeight: 800, color: new Date(job.deadline).getTime() - Date.now() < 259200000 ? "#ef4444" : "var(--text-muted)", background: "rgba(255,255,255,0.05)", padding: "2px 6px", borderRadius: "4px", whiteSpace: "nowrap" }}>
+                        ⏱️ {Math.ceil((new Date(job.deadline).getTime() - Date.now()) / (1000 * 60 * 60 * 24))} Days Left
+                      </span>
+                    )}
+                  </div>
+                  
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                    <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap", alignItems: "center" }}>
+                      <span style={{ opacity: 0.7, fontSize: "0.85rem" }}>{job.organization}</span>
+                      {job.qualification && (
+                        <span style={{ fontSize: "0.7rem", background: "rgba(0, 229, 255, 0.15)", color: "var(--color-primary)", padding: "2px 8px", borderRadius: "12px", fontWeight: 700 }}>
+                          🎓 {job.qualification}
+                        </span>
+                      )}
+                    </div>
+                    <Link href={`/jobs/${job.id}`} className="btn btn-primary" style={{ padding: "0.3rem 0.8rem", fontSize: "0.75rem", borderRadius: "6px" }}>
+                      View
+                    </Link>
+                  </div>
                 </li>
               )) : (
                 <li style={{ padding: "1rem", textAlign: "center", color: "var(--text-muted)", fontSize: "0.9rem" }}>No new updates found.</li>
@@ -112,11 +195,17 @@ export default async function Home() {
             </div>
             <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
               {admitCards.length > 0 ? admitCards.slice(0, 15).map(job => (
-                <li key={job.id} style={{ borderBottom: "1px solid var(--border-color)" }}>
-                  <Link href={`/jobs/${job.id}`} style={{ display: "block", padding: "0.8rem 1rem", fontSize: "0.95rem", color: "var(--text-main)", transition: "background 0.2s" }} className="hover:bg-white/5">
+                <li key={job.id} style={{ borderBottom: "1px solid var(--border-color)", padding: "1rem", display: "flex", flexDirection: "column", gap: "0.5rem" }} className="hover:bg-white/5 transition-colors">
+                  <Link href={`/jobs/${job.id}`} style={{ fontWeight: 700, fontSize: "0.95rem", color: "var(--text-main)", textDecoration: "none" }}>
                     <span style={{ color: "var(--color-secondary)", marginRight: "0.5rem" }}>▪</span>
-                    {job.title} - <span style={{ opacity: 0.7, fontSize: "0.85rem" }}>{job.organization}</span>
+                    {job.title}
                   </Link>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                    <span style={{ opacity: 0.7, fontSize: "0.85rem" }}>{job.organization}</span>
+                    <Link href={job.applyUrl || `/jobs/${job.id}`} target="_blank" className="btn btn-secondary" style={{ padding: "0.3rem 0.8rem", fontSize: "0.75rem", borderRadius: "6px" }}>
+                      Download
+                    </Link>
+                  </div>
                 </li>
               )) : (
                 <li style={{ padding: "1rem", textAlign: "center", color: "var(--text-muted)", fontSize: "0.9rem" }}>No admit cards available.</li>
@@ -134,11 +223,17 @@ export default async function Home() {
             </div>
             <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
               {results.length > 0 ? results.slice(0, 15).map(job => (
-                <li key={job.id} style={{ borderBottom: "1px solid var(--border-color)" }}>
-                  <Link href={`/jobs/${job.id}`} style={{ display: "block", padding: "0.8rem 1rem", fontSize: "0.95rem", color: "var(--text-main)", transition: "background 0.2s" }} className="hover:bg-white/5">
+                <li key={job.id} style={{ borderBottom: "1px solid var(--border-color)", padding: "1rem", display: "flex", flexDirection: "column", gap: "0.5rem" }} className="hover:bg-white/5 transition-colors">
+                  <Link href={`/jobs/${job.id}`} style={{ fontWeight: 700, fontSize: "0.95rem", color: "var(--text-main)", textDecoration: "none" }}>
                     <span style={{ color: "#f59e0b", marginRight: "0.5rem" }}>▪</span>
-                    {job.title} - <span style={{ opacity: 0.7, fontSize: "0.85rem" }}>{job.organization}</span>
+                    {job.title}
                   </Link>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                    <span style={{ opacity: 0.7, fontSize: "0.85rem" }}>{job.organization}</span>
+                    <Link href={job.applyUrl || `/jobs/${job.id}`} target="_blank" style={{ background: "rgba(245, 158, 11, 0.15)", color: "#f59e0b", border: "1px solid rgba(245, 158, 11, 0.3)", padding: "0.3rem 0.8rem", fontSize: "0.75rem", borderRadius: "6px", fontWeight: 700 }}>
+                      Check Result
+                    </Link>
+                  </div>
                 </li>
               )) : (
                 <li style={{ padding: "1rem", textAlign: "center", color: "var(--text-muted)", fontSize: "0.9rem" }}>No results available.</li>
