@@ -48,6 +48,73 @@ export default async function AdminDashboard() {
         </div>
       </header>
 
+      {/* Quick Add Job Form */}
+      <section style={{ marginBottom: "2rem", background: "#f8f9fa", padding: "20px", border: "1px solid #004085" }}>
+        <h2 style={{ fontSize: "1.25rem", color: "#004085", marginTop: 0, marginBottom: "15px" }}>➕ Add New Job Notification</h2>
+        <form action={async (formData: FormData) => {
+          "use server";
+          const title = formData.get("title") as string;
+          const organization = formData.get("organization") as string;
+          const type = (formData.get("type") as string) || "GOVERNMENT";
+          const category = (formData.get("category") as string) || "NEW_UPDATE";
+          const state = formData.get("state") as string;
+          const qualification = formData.get("qualification") as string;
+          const applyUrl = formData.get("applyUrl") as string;
+          const description = formData.get("description") as string;
+
+          if (title && organization) {
+            await prisma.job.create({
+              data: {
+                title,
+                organization,
+                type,
+                category,
+                state,
+                qualification,
+                applyUrl,
+                description: description || "Official notification details available.",
+              }
+            });
+          }
+        }} style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "10px" }}>
+          <div>
+            <label style={{ display: "block", fontSize: "12px", fontWeight: "bold" }}>Job Title:</label>
+            <input name="title" required placeholder="e.g. SSC CGL 2026 Notification" style={{ width: "100%", padding: "6px", fontSize: "13px" }} />
+          </div>
+          <div>
+            <label style={{ display: "block", fontSize: "12px", fontWeight: "bold" }}>Organization:</label>
+            <input name="organization" required placeholder="e.g. Staff Selection Commission" style={{ width: "100%", padding: "6px", fontSize: "13px" }} />
+          </div>
+          <div>
+            <label style={{ display: "block", fontSize: "12px", fontWeight: "bold" }}>Category:</label>
+            <select name="category" style={{ width: "100%", padding: "6px", fontSize: "13px" }}>
+              <option value="NEW_UPDATE">Latest Notification</option>
+              <option value="ADMIT_CARD">Admit Card</option>
+              <option value="RESULT">Exam Result</option>
+            </select>
+          </div>
+          <div>
+            <label style={{ display: "block", fontSize: "12px", fontWeight: "bold" }}>State / Region:</label>
+            <input name="state" placeholder="e.g. Central, Andhra Pradesh, Telangana" style={{ width: "100%", padding: "6px", fontSize: "13px" }} />
+          </div>
+          <div>
+            <label style={{ display: "block", fontSize: "12px", fontWeight: "bold" }}>Qualification:</label>
+            <input name="qualification" placeholder="e.g. Any Degree, 10th Pass, B.Tech" style={{ width: "100%", padding: "6px", fontSize: "13px" }} />
+          </div>
+          <div>
+            <label style={{ display: "block", fontSize: "12px", fontWeight: "bold" }}>Apply URL:</label>
+            <input name="applyUrl" placeholder="https://..." style={{ width: "100%", padding: "6px", fontSize: "13px" }} />
+          </div>
+          <div style={{ gridColumn: "1 / -1" }}>
+            <label style={{ display: "block", fontSize: "12px", fontWeight: "bold" }}>Brief Description:</label>
+            <textarea name="description" rows={2} placeholder="Short details..." style={{ width: "100%", padding: "6px", fontSize: "13px" }} />
+          </div>
+          <button type="submit" style={{ background: "#28a745", color: "#fff", border: "none", padding: "8px 15px", fontWeight: "bold", cursor: "pointer", gridColumn: "1 / -1" }}>
+            Publish Job Notification Now 🚀
+          </button>
+        </form>
+      </section>
+
       {/* Users Management Section */}
       <section style={{ marginBottom: "4rem" }}>
         <h2 style={{ fontSize: "2rem", marginBottom: "1.5rem" }}>Users Management</h2>
