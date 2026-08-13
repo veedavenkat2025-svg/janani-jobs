@@ -1,27 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- "Cyber Forest" Genzhi Green Palette -->
-    <color name="primary">#00FF94</color> <!-- Emerald -->
-    <color name="onPrimary">#002112</color>
-    <color name="primaryContainer">#005230</color>
-    <color name="onPrimaryContainer">#8CFFD1</color>
+    <!-- Classic Blue & White FreeJobAlert Theme -->
+    <color name="primary">#004085</color>
+    <color name="onPrimary">#FFFFFF</color>
+    <color name="primaryContainer">#002752</color>
+    <color name="onPrimaryContainer">#CCE5FF</color>
 
-    <color name="secondary">#CCFF00</color> <!-- Neon Lime -->
-    <color name="onSecondary">#1D2100</color>
-    <color name="secondaryContainer">#444B00</color>
-    <color name="onSecondaryContainer">#E6FF7A</color>
+    <color name="secondary">#28A745</color>
+    <color name="onSecondary">#FFFFFF</color>
+    <color name="secondaryContainer">#1E7E34</color>
+    <color name="onSecondaryContainer">#D4EDDA</color>
 
-    <color name="tertiary">#A9CDCF</color>
-    <color name="onTertiary">#103638</color>
-    <color name="tertiaryContainer">#294C4E</color>
-    <color name="onTertiaryContainer">#C5E9EC</color>
+    <color name="tertiary">#CC0000</color>
+    <color name="onTertiary">#FFFFFF</color>
+    <color name="tertiaryContainer">#990000</color>
+    <color name="onTertiaryContainer">#FFE0E0</color>
 
-    <color name="background">#020403</color> <!-- Cyber Black -->
-    <color name="onBackground">#E0E4DF</color>
-    <color name="surface">#0A0F0D</color> <!-- Dark Forest Surface -->
-    <color name="onSurface">#E0E4DF</color>
+    <color name="background">#FFFFFF</color>
+    <color name="onBackground">#000000</color>
+    <color name="surface">#F8F9FA</color>
+    <color name="onSurface">#000000</color>
 
-    <color name="colorPrimary">#00FF94</color>
-    <color name="colorPrimaryDark">#020403</color>
-    <color name="colorAccent">#CCFF00</color>
+    <color name="colorPrimary">#004085</color>
+    <color name="colorPrimaryDark">#002752</color>
+    <color name="colorAccent">#CC0000</color>
+
+    <color name="splash_bg">#004085</color>
 </resources>

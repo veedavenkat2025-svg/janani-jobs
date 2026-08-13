@@ -15,9 +15,10 @@
         <item name="colorOnSecondaryContainer">@color/onSecondaryContainer</item>
 
         <item name="android:windowBackground">@color/background</item>
-        <item name="android:navigationBarColor">@color/background</item>
-        <item name="android:statusBarColor">@color/background</item>
+        <item name="android:navigationBarColor">@color/primary</item>
+        <item name="android:statusBarColor">@color/primaryContainer</item>
         <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightNavigationBar">false</item>
     </style>
 
     <style name="AppTheme.NoActionBar" parent="AppTheme">
@@ -26,7 +27,7 @@
     </style>
 
     <style name="AppTheme.NoActionBarLaunch" parent="Theme.SplashScreen">
-        <item name="windowSplashScreenBackground">@color/background</item>
+        <item name="windowSplashScreenBackground">@color/splash_bg</item>
         <item name="windowSplashScreenAnimatedIcon">@drawable/splash</item>
         <item name="postSplashScreenTheme">@style/AppTheme</item>
     </style>
