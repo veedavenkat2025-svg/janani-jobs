@@ -135,37 +135,51 @@ export default async function JobDetailsPage(props: { params: Promise<{ id: stri
             </table>
 
             {/* Important Links Box */}
-            <div style={{ border: "1px solid #004085", marginBottom: "20px" }}>
-              <div style={{ background: "#004085", color: "#fff", padding: "8px 12px", fontWeight: "bold", fontSize: "15px", textAlign: "center" }}>
-                Important Official Links
-              </div>
-              <table style={{ width: "100%", borderCollapse: "collapse" }}>
-                <tbody>
-                  <tr>
-                    <td style={{ padding: "10px", borderBottom: "1px solid #eee", fontSize: "14px", fontWeight: "bold", width: "50%" }}>
-                      Online Application Link
-                    </td>
-                    <td style={{ padding: "10px", borderBottom: "1px solid #eee", textAlign: "center" }}>
-                      <a href={job.applyUrl} target="_blank" rel="noopener noreferrer" style={{ background: "#28a745", color: "#fff", padding: "6px 15px", fontWeight: "bold", textDecoration: "none", borderRadius: "3px", fontSize: "13px", display: "inline-block" }}>
-                        Apply Online Click Here 🔗
-                      </a>
-                    </td>
-                  </tr>
-                  {job.sourceUrl && (
-                    <tr>
-                      <td style={{ padding: "10px", fontSize: "14px", fontWeight: "bold" }}>
-                        Official Website / Notification
-                      </td>
-                      <td style={{ padding: "10px", textAlign: "center" }}>
-                        <a href={job.sourceUrl} target="_blank" rel="noopener noreferrer" style={{ background: "#004085", color: "#fff", padding: "6px 15px", fontWeight: "bold", textDecoration: "none", borderRadius: "3px", fontSize: "13px", display: "inline-block" }}>
-                          Official Website 🌐
-                        </a>
-                      </td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
-            </div>
+            {(() => {
+              let finalApplyUrl = job.applyUrl;
+              if (!finalApplyUrl || finalApplyUrl === "#") {
+                const orgLower = job.organization.toLowerCase();
+                if (orgLower.includes("ssc")) finalApplyUrl = "https://ssc.gov.in";
+                else if (orgLower.includes("upsc")) finalApplyUrl = "https://upsc.gov.in";
+                else if (orgLower.includes("ibps")) finalApplyUrl = "https://www.ibps.in";
+                else if (orgLower.includes("appsc")) finalApplyUrl = "https://psc.ap.gov.in";
+                else if (orgLower.includes("tspsc") || orgLower.includes("tgpsc")) finalApplyUrl = "https://tspsc.gov.in";
+                else if (orgLower.includes("rrb") || orgLower.includes("railway")) finalApplyUrl = "https://indianrailways.gov.in";
+                else finalApplyUrl = `https://www.google.com/search?q=${encodeURIComponent(job.title + " official notification apply online")}`;
+              }
+
+              return (
+                <div style={{ border: "1px solid #004085", marginBottom: "20px" }}>
+                  <div style={{ background: "#004085", color: "#fff", padding: "8px 12px", fontWeight: "bold", fontSize: "15px", textAlign: "center" }}>
+                    Important Official Links
+                  </div>
+                  <table style={{ width: "100%", borderCollapse: "collapse" }}>
+                    <tbody>
+                      <tr>
+                        <td style={{ padding: "10px", borderBottom: "1px solid #eee", fontSize: "14px", fontWeight: "bold", width: "50%" }}>
+                          Online Application Link
+                        </td>
+                        <td style={{ padding: "10px", borderBottom: "1px solid #eee", textAlign: "center" }}>
+                          <a href={finalApplyUrl} target="_blank" rel="noopener noreferrer" style={{ background: "#28a745", color: "#fff", padding: "6px 15px", fontWeight: "bold", textDecoration: "none", borderRadius: "3px", fontSize: "13px", display: "inline-block" }}>
+                            Apply Online Click Here 🔗
+                          </a>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td style={{ padding: "10px", fontSize: "14px", fontWeight: "bold" }}>
+                          Official Notification / Website
+                        </td>
+                        <td style={{ padding: "10px", textAlign: "center" }}>
+                          <a href={job.sourceUrl && job.sourceUrl !== "#" ? job.sourceUrl : finalApplyUrl} target="_blank" rel="noopener noreferrer" style={{ background: "#004085", color: "#fff", padding: "6px 15px", fontWeight: "bold", textDecoration: "none", borderRadius: "3px", fontSize: "13px", display: "inline-block" }}>
+                            Official Portal 🌐
+                          </a>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              );
+            })()}
 
             {/* Action Buttons */}
             <div style={{ display: "flex", gap: "10px", justifyContent: "center", marginTop: "20px" }}>
