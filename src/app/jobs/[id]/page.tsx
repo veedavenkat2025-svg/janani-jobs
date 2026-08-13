@@ -145,7 +145,22 @@ export default async function JobDetailsPage(props: { params: Promise<{ id: stri
                 else if (orgLower.includes("appsc")) finalApplyUrl = "https://psc.ap.gov.in";
                 else if (orgLower.includes("tspsc") || orgLower.includes("tgpsc")) finalApplyUrl = "https://tspsc.gov.in";
                 else if (orgLower.includes("rrb") || orgLower.includes("railway")) finalApplyUrl = "https://indianrailways.gov.in";
-                else finalApplyUrl = `https://www.google.com/search?q=${encodeURIComponent(job.title + " official notification apply online")}`;
+                else finalApplyUrl = `https://www.google.com/search?q=${encodeURIComponent(job.title + " official portal link")}`;
+              }
+
+              // Dynamic button labels based on category
+              let actionLabel = "Apply Online Click Here 🔗";
+              let actionTitle = "Online Application Link";
+              let btnBg = "#28a745"; // Green
+
+              if (job.category === "ADMIT_CARD") {
+                actionLabel = "Download Admit Card / Hall Ticket 🎫";
+                actionTitle = "Admit Card Download Link";
+                btnBg = "#007bff"; // Blue
+              } else if (job.category === "RESULT") {
+                actionLabel = "Check Result / Cutoff Marks 🏆";
+                actionTitle = "Exam Result Link";
+                btnBg = "#dc3545"; // Red
               }
 
               return (
@@ -157,17 +172,17 @@ export default async function JobDetailsPage(props: { params: Promise<{ id: stri
                     <tbody>
                       <tr>
                         <td style={{ padding: "10px", borderBottom: "1px solid #eee", fontSize: "14px", fontWeight: "bold", width: "50%" }}>
-                          Online Application Link
+                          {actionTitle}
                         </td>
                         <td style={{ padding: "10px", borderBottom: "1px solid #eee", textAlign: "center" }}>
-                          <a href={finalApplyUrl} target="_blank" rel="noopener noreferrer" style={{ background: "#28a745", color: "#fff", padding: "6px 15px", fontWeight: "bold", textDecoration: "none", borderRadius: "3px", fontSize: "13px", display: "inline-block" }}>
-                            Apply Online Click Here 🔗
+                          <a href={finalApplyUrl} target="_blank" rel="noopener noreferrer" style={{ background: btnBg, color: "#fff", padding: "6px 15px", fontWeight: "bold", textDecoration: "none", borderRadius: "3px", fontSize: "13px", display: "inline-block" }}>
+                            {actionLabel}
                           </a>
                         </td>
                       </tr>
                       <tr>
                         <td style={{ padding: "10px", fontSize: "14px", fontWeight: "bold" }}>
-                          Official Notification / Website
+                          Official Notification / Portal
                         </td>
                         <td style={{ padding: "10px", textAlign: "center" }}>
                           <a href={job.sourceUrl && job.sourceUrl !== "#" ? job.sourceUrl : finalApplyUrl} target="_blank" rel="noopener noreferrer" style={{ background: "#004085", color: "#fff", padding: "6px 15px", fontWeight: "bold", textDecoration: "none", borderRadius: "3px", fontSize: "13px", display: "inline-block" }}>
