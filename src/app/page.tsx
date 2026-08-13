@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { prisma } from '@/lib/prisma';
+import EligibilityCalculator from './components/EligibilityCalculator';
 
 export default async function Home({
   searchParams,
@@ -114,6 +115,10 @@ export default async function Home({
 
         {/* Main Center Content */}
         <div className="center-content">
+          
+          {/* Interactive Student Eligibility Calculator Widget */}
+          <EligibilityCalculator />
+
           <h1 style={{ color: "#cc0000", textAlign: "center", fontSize: "20px", marginBottom: "15px", marginTop: 0, textTransform: "uppercase", textShadow: "1px 1px 0px #fff" }}>
             Latest Govt Jobs, Admit Cards & Results
           </h1>
@@ -131,10 +136,19 @@ export default async function Home({
               {newUpdates.slice(0, 5).map((job, idx) => (
                 <tr key={job.id} style={{ background: idx % 2 === 0 ? "#fff" : "#f8f9fa" }}>
                   <td style={{ border: "1px solid #dee2e6", padding: "8px", fontSize: "14px" }}>
-                    <Link href={`/jobs/${job.id}`} style={{ color: "#004085", fontWeight: "bold", textDecoration: "none" }}>
-                      {job.organization} - {job.title}
-                    </Link>
-                    <span style={{ marginLeft: "10px", color: "#cc0000", fontSize: "12px", fontWeight: "bold" }}>New!</span>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                      <Link href={`/jobs/${job.id}`} style={{ color: "#004085", fontWeight: "bold", textDecoration: "none" }}>
+                        {job.organization} - {job.title}
+                      </Link>
+                      <a 
+                        href={`https://api.whatsapp.com/send?text=${encodeURIComponent('🔥 New Govt Job Alert: ' + job.title + '\nCheck eligibility & apply here: https://janani-jobs-beta.vercel.app/jobs/' + job.id)}`}
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        style={{ background: "#25D366", color: "#fff", padding: "3px 8px", borderRadius: "4px", fontSize: "11px", fontWeight: "bold", textDecoration: "none", display: "inline-flex", alignItems: "center", gap: "3px" }}
+                      >
+                        📲 Share
+                      </a>
+                    </div>
                   </td>
                 </tr>
               ))}
