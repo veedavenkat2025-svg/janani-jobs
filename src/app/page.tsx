@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { prisma } from '@/lib/prisma';
 import EligibilityCalculator from './components/EligibilityCalculator';
+import StateFilterDropdown from './components/StateFilterDropdown';
 
 export default async function Home({
   searchParams,
@@ -92,33 +93,18 @@ export default async function Home({
 
       <div className="container classic-layout" style={{ paddingBottom: "40px" }}>
         
-        {/* Left Sidebar - State Quick Links */}
+        {/* Left Sidebar - Smart Dropdown Filter */}
         <aside className="sidebar-left">
-          <div className="sidebar-box">
-            <div className="sidebar-header">State Govt Jobs</div>
+          <StateFilterDropdown currentState={statePref} currentQual={qualPref || 'ALL'} />
+          
+          <div className="sidebar-box" style={{ marginTop: "15px" }}>
+            <div className="sidebar-header">Quick Categories</div>
             <ul className="sidebar-links">
-              <li><Link href="/?state=Andhra Pradesh">Andhra Pradesh</Link></li>
-              <li><Link href="/?state=Telangana">Telangana</Link></li>
-              <li><Link href="/?state=Uttar Pradesh">Uttar Pradesh</Link></li>
-              <li><Link href="/?state=Maharashtra">Maharashtra</Link></li>
-              <li><Link href="/?state=Delhi">Delhi</Link></li>
-              <li><Link href="/?state=Bihar">Bihar</Link></li>
-              <li><Link href="/?state=Karnataka">Karnataka</Link></li>
-              <li><Link href="/?state=Tamil Nadu">Tamil Nadu</Link></li>
-              <li><Link href="/?state=Kerala">Kerala</Link></li>
-              <li><Link href="/?state=Rajasthan">Rajasthan</Link></li>
-              <li><Link href="/?state=Madhya Pradesh">Madhya Pradesh</Link></li>
-              <li><Link href="/?state=Central">View All States &gt;&gt;</Link></li>
-            </ul>
-          </div>
-          <div className="sidebar-box">
-            <div className="sidebar-header">Job Categories</div>
-            <ul className="sidebar-links">
-              <li><Link href="/?qual=10th Pass">10th Pass Jobs</Link></li>
-              <li><Link href="/?qual=12th Pass">12th Pass Jobs</Link></li>
-              <li><Link href="/?qual=Degree">Any Degree Jobs</Link></li>
-              <li><Link href="/?qual=B.Tech">B.Tech / B.E. Jobs</Link></li>
-              <li><Link href="/?qual=ITI">ITI / Diploma Jobs</Link></li>
+              <li><Link href="/?category=NEW_UPDATE">🔥 Latest Govt Jobs</Link></li>
+              <li><Link href="/?category=ADMIT_CARD">🎫 Hall Tickets / Admit Cards</Link></li>
+              <li><Link href="/?category=RESULT">🏆 Exam Results & Cutoffs</Link></li>
+              <li><Link href="/exam-prep">📚 Syllabus & Exam Prep</Link></li>
+              <li><Link href="/exam-prep/mock-test">⏱️ Free Practice Tests</Link></li>
             </ul>
           </div>
         </aside>

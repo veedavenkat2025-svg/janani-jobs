@@ -4,18 +4,22 @@ import { prisma } from '@/lib/prisma';
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = 'https://janani-jobs-beta.vercel.app'; 
 
-  // Fetch top 50 recent jobs for the sitemap
-  const jobs = await prisma.job.findMany({
-    take: 50,
-    orderBy: { postedAt: 'desc' }
-  });
+  let jobEntries: MetadataRoute.Sitemap = [];
+  try {
+    const jobs = await prisma.job.findMany({
+      take: 50,
+      orderBy: { postedAt: 'desc' }
+    });
 
-  const jobEntries: MetadataRoute.Sitemap = jobs.map((job) => ({
-    url: `${baseUrl}/jobs/${job.id}`,
-    lastModified: job.updatedAt,
-    changeFrequency: 'daily',
-    priority: 0.8,
-  }));
+    jobEntries = jobs.map((job) => ({
+      url: `${baseUrl}/jobs/${job.id}`,
+      lastModified: job.updatedAt,
+      changeFrequency: 'daily',
+      priority: 0.8,
+    }));
+  } catch (e) {
+    console.error("Sitemap DB fetch warning:", e);
+  }
 
   return [
     {
