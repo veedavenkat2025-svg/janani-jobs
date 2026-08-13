@@ -247,13 +247,13 @@ export default async function Home({
           <div className="sidebar-box">
             <div className="sidebar-header">Important Resources</div>
             <ul className="sidebar-links">
-              <li><Link href="#">Answer Keys</Link></li>
-              <li><Link href="#">Syllabus</Link></li>
-              <li><Link href="#">Previous Papers</Link></li>
-              <li><Link href="#">Exam Pattern</Link></li>
-              <li><Link href="#">Current Affairs</Link></li>
-              <li><Link href="#">Mock Tests</Link></li>
-              <li><Link href="#">Upcoming Exams</Link></li>
+              <li><Link href="/?category=ADMIT_CARD">Answer Keys</Link></li>
+              <li><Link href="/exam-prep">Syllabus</Link></li>
+              <li><Link href="/exam-prep">Previous Papers</Link></li>
+              <li><Link href="/exam-prep">Exam Pattern</Link></li>
+              <li><Link href="/exam-prep">Current Affairs</Link></li>
+              <li><Link href="/exam-prep/mock-test">Mock Tests 📝</Link></li>
+              <li><Link href="/?category=NEW_UPDATE">Upcoming Exams</Link></li>
             </ul>
           </div>
           <div className="sidebar-box">
