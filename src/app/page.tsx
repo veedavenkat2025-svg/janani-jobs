@@ -63,7 +63,7 @@ export default async function Home({
         <div className="container" style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "10px" }}>
           <Link href="/" style={{ color: "#fff", fontWeight: "bold", padding: "5px 10px", background: "#002752", borderRadius: "4px", fontSize: "14px", textDecoration: "none" }}>Home</Link>
           <Link href="/?category=NEW_UPDATE" style={{ color: "#fff", fontWeight: "bold", padding: "5px 10px", fontSize: "14px", textDecoration: "none" }}>All India Govt Jobs</Link>
-          <Link href="/?category=NEW_UPDATE" style={{ color: "#fff", fontWeight: "bold", padding: "5px 10px", fontSize: "14px", textDecoration: "none" }}>State Govt Jobs</Link>
+          <Link href="/?state=Andhra Pradesh" style={{ color: "#fff", fontWeight: "bold", padding: "5px 10px", fontSize: "14px", textDecoration: "none" }}>State Govt Jobs</Link>
           <Link href="/?category=NEW_UPDATE" style={{ color: "#fff", fontWeight: "bold", padding: "5px 10px", fontSize: "14px", textDecoration: "none" }}>Bank Jobs</Link>
           <Link href="/?category=NEW_UPDATE" style={{ color: "#fff", fontWeight: "bold", padding: "5px 10px", fontSize: "14px", textDecoration: "none" }}>Teaching Jobs</Link>
           <Link href="/?category=NEW_UPDATE" style={{ color: "#fff", fontWeight: "bold", padding: "5px 10px", fontSize: "14px", textDecoration: "none" }}>Engineering Jobs</Link>
@@ -79,131 +79,147 @@ export default async function Home({
         </div>
       </div>
 
-      <div className="container" style={{ display: "flex", gap: "20px", marginTop: "20px", paddingBottom: "40px" }}>
+      <div className="container classic-layout" style={{ paddingBottom: "40px" }}>
         
-        {/* Left Sidebar - States (Classic) */}
-        <aside style={{ width: "200px", flexShrink: 0, display: "none" }}>
-           {/* Sidebar placeholder */}
+        {/* Left Sidebar - State Quick Links */}
+        <aside className="sidebar-left">
+          <div className="sidebar-box">
+            <div className="sidebar-header">State Govt Jobs</div>
+            <ul className="sidebar-links">
+              <li><Link href="/?state=Andhra Pradesh">Andhra Pradesh</Link></li>
+              <li><Link href="/?state=Telangana">Telangana</Link></li>
+              <li><Link href="/?state=Uttar Pradesh">Uttar Pradesh</Link></li>
+              <li><Link href="/?state=Maharashtra">Maharashtra</Link></li>
+              <li><Link href="/?state=Delhi">Delhi</Link></li>
+              <li><Link href="/?state=Bihar">Bihar</Link></li>
+              <li><Link href="/?state=Karnataka">Karnataka</Link></li>
+              <li><Link href="/?state=Tamil Nadu">Tamil Nadu</Link></li>
+              <li><Link href="/?state=Kerala">Kerala</Link></li>
+              <li><Link href="/?state=Rajasthan">Rajasthan</Link></li>
+              <li><Link href="/?state=Madhya Pradesh">Madhya Pradesh</Link></li>
+              <li><Link href="/?state=Central">View All States &gt;&gt;</Link></li>
+            </ul>
+          </div>
+          <div className="sidebar-box">
+            <div className="sidebar-header">Job Categories</div>
+            <ul className="sidebar-links">
+              <li><Link href="/?qual=10th Pass">10th Pass Jobs</Link></li>
+              <li><Link href="/?qual=12th Pass">12th Pass Jobs</Link></li>
+              <li><Link href="/?qual=Degree">Any Degree Jobs</Link></li>
+              <li><Link href="/?qual=B.Tech">B.Tech / B.E. Jobs</Link></li>
+              <li><Link href="/?qual=ITI">ITI / Diploma Jobs</Link></li>
+            </ul>
+          </div>
         </aside>
 
-        {/* Main Content Area */}
-        <div style={{ flex: 1 }}>
-          
-          {/* Filter Form */}
-          <div style={{ background: "#f8f9fa", padding: "15px", border: "1px solid #dee2e6", marginBottom: "20px", textAlign: "center" }}>
-             <form method="GET" action="/">
-               <label style={{ fontWeight: "bold", marginRight: "10px", color: "#004085" }}>Filter Jobs:</label>
-               <select name="state" defaultValue={statePref} style={{ padding: "5px", marginRight: "10px", border: "1px solid #ccc" }}>
-                 <option value="All India">All India</option>
-                 <option value="Andhra Pradesh">Andhra Pradesh</option>
-                 <option value="Telangana">Telangana</option>
-                 <option value="Uttar Pradesh">Uttar Pradesh</option>
-                 <option value="Maharashtra">Maharashtra</option>
-               </select>
-               <select name="qual" defaultValue={qualPref || "Any Qualification"} style={{ padding: "5px", marginRight: "10px", border: "1px solid #ccc" }}>
-                 <option value="Any Qualification">Any Qualification</option>
-                 <option value="10th Pass">10th Pass</option>
-                 <option value="12th Pass">12th Pass</option>
-                 <option value="Any Degree">Any Degree</option>
-                 <option value="B.Tech">B.Tech / B.E.</option>
-               </select>
-               <button type="submit" style={{ padding: "6px 15px", background: "#004085", color: "#fff", border: "none", fontWeight: "bold", cursor: "pointer" }}>Search</button>
-             </form>
-          </div>
-
-          <h1 style={{ color: "#cc0000", textAlign: "center", fontSize: "24px", marginBottom: "20px", textTransform: "uppercase" }}>
+        {/* Main Center Content */}
+        <div className="center-content">
+          <h1 style={{ color: "#cc0000", textAlign: "center", fontSize: "20px", marginBottom: "15px", marginTop: 0, textTransform: "uppercase", textShadow: "1px 1px 0px #fff" }}>
             Latest Govt Jobs, Admit Cards & Results
           </h1>
 
-          {/* 3-Column Tables */}
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "15px" }}>
-            
-            {/* Table 1: Latest Notifications */}
-            <table style={{ width: "100%", borderCollapse: "collapse", border: "1px solid #004085" }}>
-              <thead>
-                <tr>
-                  <th style={{ background: "#004085", color: "#fff", padding: "10px", border: "1px solid #004085", fontSize: "16px" }}>
-                    Latest Notifications
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {newUpdates.map(job => (
-                  <tr key={job.id}>
-                    <td style={{ border: "1px solid #dee2e6", padding: "8px", fontSize: "14px" }}>
-                      <Link href={`/jobs/${job.id}`} style={{ color: "#004085", fontWeight: "bold", textDecoration: "none", display: "block", marginBottom: "4px" }}>
-                        {job.title}
-                      </Link>
-                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "5px", marginTop: "4px" }}>
-                        <span style={{ fontSize: "12px", background: "#f8f9fa", padding: "2px 5px", border: "1px solid #ccc" }}>
-                          {job.qualification || "Check Notification"}
-                        </span>
-                        {job.deadline && (
-                           <span style={{ color: "#cc0000", fontWeight: "bold", fontSize: "12px" }}>
-                             Last Date: {new Date(job.deadline).toLocaleDateString()}
-                           </span>
-                        )}
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-                <tr>
-                  <td style={{ background: "#f8f9fa", textAlign: "center", padding: "10px", border: "1px solid #dee2e6" }}>
-                    <Link href="/?category=NEW_UPDATE" style={{ color: "#cc0000", fontWeight: "bold", textDecoration: "none" }}>View All Notifications &gt;&gt;</Link>
+          {/* Top Dense Table for Latest (Spanning full width of center) */}
+          <table style={{ width: "100%", borderCollapse: "collapse", border: "1px solid #004085", marginBottom: "15px" }}>
+            <thead>
+              <tr>
+                <th style={{ background: "#004085", color: "#fff", padding: "8px", border: "1px solid #004085", fontSize: "15px", textAlign: "left" }}>
+                  Hot Notifications 🔴
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {newUpdates.slice(0, 5).map((job, idx) => (
+                <tr key={job.id} style={{ background: idx % 2 === 0 ? "#fff" : "#f8f9fa" }}>
+                  <td style={{ border: "1px solid #dee2e6", padding: "8px", fontSize: "14px" }}>
+                    <Link href={`/jobs/${job.id}`} style={{ color: "#004085", fontWeight: "bold", textDecoration: "none" }}>
+                      {job.organization} - {job.title}
+                    </Link>
+                    <span style={{ marginLeft: "10px", color: "#cc0000", fontSize: "12px", fontWeight: "bold" }}>New!</span>
                   </td>
                 </tr>
-              </tbody>
-            </table>
+              ))}
+            </tbody>
+          </table>
 
-            {/* Table 2: Admit Cards */}
+          {/* 3-Column Split for Admit Cards, Results, Notifications */}
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "10px" }}>
+            
+            {/* Table: Admit Cards */}
             <table style={{ width: "100%", borderCollapse: "collapse", border: "1px solid #004085" }}>
               <thead>
                 <tr>
-                  <th style={{ background: "#004085", color: "#fff", padding: "10px", border: "1px solid #004085", fontSize: "16px" }}>
+                  <th style={{ background: "#004085", color: "#fff", padding: "8px", border: "1px solid #004085", fontSize: "15px" }}>
                     Admit Cards
                   </th>
                 </tr>
               </thead>
               <tbody>
-                {admitCards.map(job => (
-                  <tr key={job.id}>
-                    <td style={{ border: "1px solid #dee2e6", padding: "8px", fontSize: "14px" }}>
-                      <Link href={job.applyUrl || `/jobs/${job.id}`} target="_blank" style={{ color: "#004085", fontWeight: "bold", textDecoration: "none" }}>
+                {admitCards.slice(0, 15).map((job, idx) => (
+                  <tr key={job.id} style={{ background: idx % 2 === 0 ? "#fff" : "#f8f9fa" }}>
+                    <td style={{ border: "1px solid #dee2e6", padding: "6px", fontSize: "13px" }}>
+                      <Link href={job.applyUrl || `/jobs/${job.id}`} target="_blank" style={{ color: "#004085", textDecoration: "none" }}>
                         {job.title}
                       </Link>
                     </td>
                   </tr>
                 ))}
                 <tr>
-                  <td style={{ background: "#f8f9fa", textAlign: "center", padding: "10px", border: "1px solid #dee2e6" }}>
-                    <Link href="/?category=ADMIT_CARD" style={{ color: "#cc0000", fontWeight: "bold", textDecoration: "none" }}>View All Admit Cards &gt;&gt;</Link>
+                  <td style={{ background: "#f8f9fa", textAlign: "right", padding: "8px", border: "1px solid #dee2e6" }}>
+                    <Link href="/?category=ADMIT_CARD" style={{ color: "#cc0000", fontWeight: "bold", textDecoration: "none", fontSize: "12px" }}>View All &gt;&gt;</Link>
                   </td>
                 </tr>
               </tbody>
             </table>
 
-            {/* Table 3: Results */}
+            {/* Table: Latest Notifications */}
             <table style={{ width: "100%", borderCollapse: "collapse", border: "1px solid #004085" }}>
               <thead>
                 <tr>
-                  <th style={{ background: "#004085", color: "#fff", padding: "10px", border: "1px solid #004085", fontSize: "16px" }}>
-                    Results
+                  <th style={{ background: "#004085", color: "#fff", padding: "8px", border: "1px solid #004085", fontSize: "15px" }}>
+                    Latest Updates
                   </th>
                 </tr>
               </thead>
               <tbody>
-                {results.map(job => (
-                  <tr key={job.id}>
-                    <td style={{ border: "1px solid #dee2e6", padding: "8px", fontSize: "14px" }}>
-                      <Link href={job.applyUrl || `/jobs/${job.id}`} target="_blank" style={{ color: "#004085", fontWeight: "bold", textDecoration: "none" }}>
+                {newUpdates.slice(5, 20).map((job, idx) => (
+                  <tr key={job.id} style={{ background: idx % 2 === 0 ? "#fff" : "#f8f9fa" }}>
+                    <td style={{ border: "1px solid #dee2e6", padding: "6px", fontSize: "13px" }}>
+                      <Link href={`/jobs/${job.id}`} style={{ color: "#004085", textDecoration: "none" }}>
                         {job.title}
                       </Link>
                     </td>
                   </tr>
                 ))}
                 <tr>
-                  <td style={{ background: "#f8f9fa", textAlign: "center", padding: "10px", border: "1px solid #dee2e6" }}>
-                    <Link href="/?category=RESULT" style={{ color: "#cc0000", fontWeight: "bold", textDecoration: "none" }}>View All Results &gt;&gt;</Link>
+                  <td style={{ background: "#f8f9fa", textAlign: "right", padding: "8px", border: "1px solid #dee2e6" }}>
+                    <Link href="/?category=NEW_UPDATE" style={{ color: "#cc0000", fontWeight: "bold", textDecoration: "none", fontSize: "12px" }}>View All &gt;&gt;</Link>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
+            {/* Table: Results */}
+            <table style={{ width: "100%", borderCollapse: "collapse", border: "1px solid #004085" }}>
+              <thead>
+                <tr>
+                  <th style={{ background: "#004085", color: "#fff", padding: "8px", border: "1px solid #004085", fontSize: "15px" }}>
+                    Exam Results
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {results.slice(0, 15).map((job, idx) => (
+                  <tr key={job.id} style={{ background: idx % 2 === 0 ? "#fff" : "#f8f9fa" }}>
+                    <td style={{ border: "1px solid #dee2e6", padding: "6px", fontSize: "13px" }}>
+                      <Link href={job.applyUrl || `/jobs/${job.id}`} target="_blank" style={{ color: "#004085", textDecoration: "none" }}>
+                        {job.title}
+                      </Link>
+                    </td>
+                  </tr>
+                ))}
+                <tr>
+                  <td style={{ background: "#f8f9fa", textAlign: "right", padding: "8px", border: "1px solid #dee2e6" }}>
+                    <Link href="/?category=RESULT" style={{ color: "#cc0000", fontWeight: "bold", textDecoration: "none", fontSize: "12px" }}>View All &gt;&gt;</Link>
                   </td>
                 </tr>
               </tbody>
@@ -211,6 +227,30 @@ export default async function Home({
 
           </div>
         </div>
+
+        {/* Right Sidebar - Resources */}
+        <aside className="sidebar-right">
+          <div className="sidebar-box">
+            <div className="sidebar-header">Important Resources</div>
+            <ul className="sidebar-links">
+              <li><Link href="#">Answer Keys</Link></li>
+              <li><Link href="#">Syllabus</Link></li>
+              <li><Link href="#">Previous Papers</Link></li>
+              <li><Link href="#">Exam Pattern</Link></li>
+              <li><Link href="#">Current Affairs</Link></li>
+              <li><Link href="#">Mock Tests</Link></li>
+              <li><Link href="#">Upcoming Exams</Link></li>
+            </ul>
+          </div>
+          <div className="sidebar-box">
+            <div className="sidebar-header">Stay Connected</div>
+            <div style={{ padding: "10px", textAlign: "center", background: "#f8f9fa" }}>
+              <p style={{ fontSize: "12px", marginBottom: "8px", color: "#333" }}>Download our Official App for instant Push Notifications!</p>
+              <button style={{ background: "#28a745", color: "white", border: "none", padding: "8px 12px", fontWeight: "bold", borderRadius: "4px", width: "100%", cursor: "pointer" }}>Get Android App</button>
+            </div>
+          </div>
+        </aside>
+
       </div>
     </main>
   );
