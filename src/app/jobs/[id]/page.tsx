@@ -43,101 +43,145 @@ export default async function JobDetailsPage(props: { params: Promise<{ id: stri
   }
 
   return (
-    <main className="container" style={{ padding: "4rem 0", maxWidth: "800px" }}>
-      <Link href="/jobs" style={{ display: "inline-block", marginBottom: "2rem", color: "var(--text-muted)" }}>
-        ← Back to all jobs
-      </Link>
-
-      <div className="card">
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "1rem" }}>
-          <span style={{ 
-            padding: "0.25rem 0.75rem", 
-            borderRadius: "20px", 
-            fontSize: "0.875rem", 
-            fontWeight: 600,
-            background: job.type === 'GOVERNMENT' ? "rgba(0, 255, 148, 0.1)" : "rgba(0, 229, 255, 0.1)",
-            color: job.type === 'GOVERNMENT' ? "var(--color-primary)" : "var(--color-secondary)",
-            border: `1px solid ${job.type === 'GOVERNMENT' ? "rgba(0, 255, 148, 0.3)" : "rgba(0, 229, 255, 0.3)"}`
-          }}>
-            {job.type === 'GOVERNMENT' ? 'Government Job' : 'Private Sector'}
-          </span>
-          <span style={{ color: "var(--text-muted)", fontSize: "0.875rem" }}>
-            Posted: {job.postedAt.toLocaleDateString()}
-          </span>
-        </div>
-
-        <h1 style={{ fontSize: "2.5rem", marginBottom: "0.5rem" }}>{job.title}</h1>
-        <h2 style={{ fontSize: "1.25rem", color: "var(--text-muted)", marginBottom: "2rem", fontWeight: 500 }}>
-          {job.organization}
-        </h2>
+    <main style={{ background: "#fff", color: "#000", fontFamily: "Arial, sans-serif", padding: "20px 0" }}>
+      <div className="container" style={{ maxWidth: "900px", margin: "0 auto", padding: "0 15px" }}>
         
-        {/* Eligibility Banner */}
-        {userQualification && job.qualification && (
-          <div style={{ 
-            padding: "1rem", 
-            marginBottom: "2rem", 
-            borderRadius: "12px", 
-            display: "flex", 
-            alignItems: "center", 
-            gap: "0.75rem",
-            background: isEligible ? "rgba(0, 255, 148, 0.1)" : "rgba(255, 0, 85, 0.1)",
-            border: `1px solid ${isEligible ? "rgba(0, 255, 148, 0.3)" : "rgba(255, 0, 85, 0.3)"}`
-          }}>
-            <span style={{ fontSize: "1.5rem" }}>{isEligible ? "✅" : "⚠️"}</span>
-            <div>
-              <p style={{ fontWeight: 600, color: isEligible ? "var(--color-success)" : "var(--color-accent)", margin: 0 }}>
-                {isEligible ? "You are Eligible to Apply!" : "This requires a higher qualification."}
-              </p>
-              <p style={{ fontSize: "0.85rem", color: "var(--text-muted)", margin: 0 }}>
-                Requires: <strong>{job.qualification}</strong> | Your Profile: <strong>{userQualification}</strong>
-              </p>
-            </div>
-          </div>
-        )}
+        <Link href="/" style={{ color: "#004085", fontWeight: "bold", textDecoration: "none", display: "inline-block", marginBottom: "15px", fontSize: "14px" }}>
+          ← Back to Home
+        </Link>
 
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem", marginBottom: "2rem", padding: "1.5rem", background: "var(--bg-subtle)", borderRadius: "12px", border: "1px solid var(--border-color)" }}>
-          <div>
-            <p style={{ color: "var(--text-muted)", fontSize: "0.875rem", marginBottom: "0.25rem" }}>Location</p>
-            <p style={{ fontWeight: 600 }}>{job.location || 'India'}</p>
-          </div>
-          <div>
-            <p style={{ color: "var(--text-muted)", fontSize: "0.875rem", marginBottom: "0.25rem" }}>Salary</p>
-            <p style={{ fontWeight: 600 }}>{job.salary || 'Not specified'}</p>
-          </div>
-          {job.qualification && (
-            <div>
-              <p style={{ color: "var(--text-muted)", fontSize: "0.875rem", marginBottom: "0.25rem" }}>Eligibility</p>
-              <p style={{ fontWeight: 600, color: "var(--color-primary)" }}>🎓 {job.qualification}</p>
-            </div>
-          )}
-          {job.deadline && (
-            <div>
-              <p style={{ color: "var(--text-muted)", fontSize: "0.875rem", marginBottom: "0.25rem" }}>Application Deadline</p>
-              <p style={{ fontWeight: 600, color: "var(--color-accent)" }}>{job.deadline.toLocaleDateString()}</p>
-            </div>
-          )}
-        </div>
-
-        <div style={{ marginBottom: "3rem" }}>
-          <h3 style={{ fontSize: "1.25rem", marginBottom: "1rem" }}>Job Description</h3>
-          <p style={{ whiteSpace: "pre-wrap", color: "var(--text-muted)" }}>{job.description}</p>
-        </div>
-
-        <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
-          <a href={job.applyUrl} target="_blank" rel="noopener noreferrer" className="btn btn-primary" style={{ padding: "1rem 2rem", fontSize: "1.125rem", flex: 1, textAlign: "center", minWidth: "200px" }}>
-            Apply Now
-          </a>
+        {/* FreeJobAlert Classic Job Box */}
+        <div style={{ border: "2px solid #004085", background: "#fff" }}>
           
-          <ShareButton title={job.title} text={`Check out this job at ${job.organization}`} />
+          {/* Header Bar */}
+          <div style={{ background: "#004085", color: "#fff", padding: "12px", textAlign: "center" }}>
+            <h1 style={{ fontSize: "20px", margin: 0, fontWeight: "bold", textTransform: "uppercase" }}>
+              {job.organization}
+            </h1>
+            <h2 style={{ fontSize: "16px", margin: "5px 0 0 0", color: "#ffcc00", fontWeight: "normal" }}>
+              {job.title}
+            </h2>
+          </div>
 
-          <form action={async () => {
-            "use server";
-            await toggleSaveJob(job.id);
-          }}>
-            <button type="submit" className="btn btn-secondary" style={{ padding: "1rem 2rem", fontSize: "1.125rem" }}>
-              {isSaved ? "★ Saved" : "☆ Save Job"}
-            </button>
-          </form>
+          <div style={{ padding: "15px" }}>
+            
+            {/* Meta Stats */}
+            <div style={{ display: "flex", justifyContent: "space-between", borderBottom: "1px solid #ccc", paddingBottom: "10px", marginBottom: "15px", fontSize: "14px" }}>
+              <span><strong>Post Date:</strong> {job.postedAt.toLocaleDateString()}</span>
+              <span><strong>Category:</strong> <span style={{ color: "#cc0000", fontWeight: "bold" }}>{job.category}</span></span>
+              <span><strong>State/Region:</strong> {job.state || job.location || "Central"}</span>
+            </div>
+
+            {/* Student Eligibility Alert Banner */}
+            {userQualification && job.qualification && (
+              <div style={{ 
+                padding: "10px 15px", 
+                marginBottom: "15px", 
+                border: `1px solid ${isEligible ? "#28a745" : "#dc3545"}`, 
+                background: isEligible ? "#d4edda" : "#f8d7da",
+                color: isEligible ? "#155724" : "#721c24",
+                fontSize: "14px",
+                fontWeight: "bold"
+              }}>
+                {isEligible ? "✅ You meet the qualification criteria for this post!" : "⚠️ Higher qualification required for this post."}
+                <span style={{ fontWeight: "normal", display: "block", fontSize: "12px", marginTop: "3px" }}>
+                  Required: {job.qualification} | Your Profile: {userQualification}
+                </span>
+              </div>
+            )}
+
+            {/* Information Table */}
+            <table style={{ width: "100%", borderCollapse: "collapse", border: "1px solid #ccc", marginBottom: "20px" }}>
+              <tbody>
+                <tr>
+                  <td colSpan={2} style={{ background: "#f0f8ff", padding: "10px", fontWeight: "bold", color: "#004085", fontSize: "15px", borderBottom: "1px solid #ccc" }}>
+                    Brief Information
+                  </td>
+                </tr>
+                <tr>
+                  <td colSpan={2} style={{ padding: "10px", fontSize: "14px", borderBottom: "1px solid #ccc", lineHeight: "1.6" }}>
+                    {job.description}
+                  </td>
+                </tr>
+
+                {/* Important Dates & Fees */}
+                <tr>
+                  <td style={{ width: "50%", verticalAlign: "top", borderRight: "1px solid #ccc", borderBottom: "1px solid #ccc", padding: "10px" }}>
+                    <p style={{ color: "#cc0000", fontWeight: "bold", marginTop: 0, marginBottom: "8px", fontSize: "14px" }}>
+                      Important Dates
+                    </p>
+                    <ul style={{ margin: 0, paddingLeft: "20px", fontSize: "13px", lineHeight: "1.8" }}>
+                      <li><strong>Posted Date:</strong> {job.postedAt.toLocaleDateString()}</li>
+                      {job.deadline && (
+                        <li style={{ color: "#cc0000", fontWeight: "bold" }}>
+                          <strong>Last Date to Apply:</strong> {new Date(job.deadline).toLocaleDateString()}
+                        </li>
+                      )}
+                    </ul>
+                  </td>
+                  <td style={{ width: "50%", verticalAlign: "top", borderBottom: "1px solid #ccc", padding: "10px" }}>
+                    <p style={{ color: "#004085", fontWeight: "bold", marginTop: 0, marginBottom: "8px", fontSize: "14px" }}>
+                      Educational Qualification
+                    </p>
+                    <p style={{ fontSize: "13px", margin: 0, fontWeight: "bold" }}>
+                      🎓 {job.qualification || "As per official notification"}
+                    </p>
+                    <p style={{ fontSize: "12px", color: "#666", marginTop: "5px" }}>
+                      Salary: {job.salary || "As per Govt Rules"}
+                    </p>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
+            {/* Important Links Box */}
+            <div style={{ border: "1px solid #004085", marginBottom: "20px" }}>
+              <div style={{ background: "#004085", color: "#fff", padding: "8px 12px", fontWeight: "bold", fontSize: "15px", textAlign: "center" }}>
+                Important Official Links
+              </div>
+              <table style={{ width: "100%", borderCollapse: "collapse" }}>
+                <tbody>
+                  <tr>
+                    <td style={{ padding: "10px", borderBottom: "1px solid #eee", fontSize: "14px", fontWeight: "bold", width: "50%" }}>
+                      Online Application Link
+                    </td>
+                    <td style={{ padding: "10px", borderBottom: "1px solid #eee", textAlign: "center" }}>
+                      <a href={job.applyUrl} target="_blank" rel="noopener noreferrer" style={{ background: "#28a745", color: "#fff", padding: "6px 15px", fontWeight: "bold", textDecoration: "none", borderRadius: "3px", fontSize: "13px", display: "inline-block" }}>
+                        Apply Online Click Here 🔗
+                      </a>
+                    </td>
+                  </tr>
+                  {job.sourceUrl && (
+                    <tr>
+                      <td style={{ padding: "10px", fontSize: "14px", fontWeight: "bold" }}>
+                        Official Website / Notification
+                      </td>
+                      <td style={{ padding: "10px", textAlign: "center" }}>
+                        <a href={job.sourceUrl} target="_blank" rel="noopener noreferrer" style={{ background: "#004085", color: "#fff", padding: "6px 15px", fontWeight: "bold", textDecoration: "none", borderRadius: "3px", fontSize: "13px", display: "inline-block" }}>
+                          Official Website 🌐
+                        </a>
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Action Buttons */}
+            <div style={{ display: "flex", gap: "10px", justifyContent: "center", marginTop: "20px" }}>
+              <ShareButton title={job.title} text={`Check out this ${job.organization} job notification:`} />
+              
+              <form action={async () => {
+                "use server";
+                await toggleSaveJob(job.id);
+              }}>
+                <button type="submit" style={{ background: "#ffc107", color: "#000", border: "1px solid #e0a800", padding: "8px 15px", fontWeight: "bold", cursor: "pointer", borderRadius: "3px", fontSize: "13px" }}>
+                  {isSaved ? "★ Saved in Profile" : "☆ Save Job"}
+                </button>
+              </form>
+            </div>
+
+          </div>
         </div>
       </div>
     </main>
