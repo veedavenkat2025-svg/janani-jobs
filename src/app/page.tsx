@@ -171,7 +171,7 @@ export default async function Home({
                 {admitCards.slice(0, 15).map((job, idx) => (
                   <tr key={job.id} style={{ background: idx % 2 === 0 ? "#fff" : "#f8f9fa" }}>
                     <td style={{ border: "1px solid #dee2e6", padding: "6px", fontSize: "13px" }}>
-                      <Link href={job.applyUrl || `/jobs/${job.id}`} target="_blank" style={{ color: "#004085", textDecoration: "none" }}>
+                      <Link href={job.applyUrl && job.applyUrl !== "#" ? job.applyUrl : `/jobs/${job.id}`} style={{ color: "#004085", textDecoration: "none", fontWeight: "bold" }}>
                         {job.title}
                       </Link>
                     </td>
@@ -198,7 +198,7 @@ export default async function Home({
                 {newUpdates.slice(5, 20).map((job, idx) => (
                   <tr key={job.id} style={{ background: idx % 2 === 0 ? "#fff" : "#f8f9fa" }}>
                     <td style={{ border: "1px solid #dee2e6", padding: "6px", fontSize: "13px" }}>
-                      <Link href={`/jobs/${job.id}`} style={{ color: "#004085", textDecoration: "none" }}>
+                      <Link href={`/jobs/${job.id}`} style={{ color: "#004085", textDecoration: "none", fontWeight: "bold" }}>
                         {job.title}
                       </Link>
                     </td>
@@ -225,7 +225,7 @@ export default async function Home({
                 {results.slice(0, 15).map((job, idx) => (
                   <tr key={job.id} style={{ background: idx % 2 === 0 ? "#fff" : "#f8f9fa" }}>
                     <td style={{ border: "1px solid #dee2e6", padding: "6px", fontSize: "13px" }}>
-                      <Link href={job.applyUrl || `/jobs/${job.id}`} target="_blank" style={{ color: "#004085", textDecoration: "none" }}>
+                      <Link href={job.applyUrl && job.applyUrl !== "#" ? job.applyUrl : `/jobs/${job.id}`} style={{ color: "#004085", textDecoration: "none", fontWeight: "bold" }}>
                         {job.title}
                       </Link>
                     </td>
