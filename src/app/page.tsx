@@ -1,16 +1,16 @@
 import Link from 'next/link';
 import { prisma } from '@/lib/prisma';
 import EligibilityCalculator from './components/EligibilityCalculator';
-import StateFilterDropdown from './components/StateFilterDropdown';
 
 export default async function Home({
   searchParams,
 }: {
-  searchParams: { state?: string, category?: string, qual?: string }
+  searchParams: Promise<{ state?: string, category?: string, qual?: string }>
 }) {
-  const statePref = searchParams.state || "All India";
-  const categoryPref = searchParams.category || null;
-  const qualPref = searchParams.qual || null;
+  const params = await searchParams;
+  const statePref = params.state || "All India";
+  const categoryPref = params.category || null;
+  const qualPref = params.qual || null;
 
   // Query database
   let whereClause: any = {};
@@ -27,7 +27,7 @@ export default async function Home({
     whereClause.category = categoryPref;
   }
 
-  if (qualPref && qualPref !== "Any Qualification") {
+  if (qualPref) {
     whereClause.qualification = { contains: qualPref, mode: "insensitive" };
   }
 
@@ -93,18 +93,25 @@ export default async function Home({
 
       <div className="container classic-layout" style={{ paddingBottom: "40px" }}>
         
-        {/* Left Sidebar - Smart Dropdown Filter */}
+        {/* Left Sidebar - Quick Categories & Filters */}
         <aside className="sidebar-left">
-          <StateFilterDropdown currentState={statePref} currentQual={qualPref || 'ALL'} />
-          
-          <div className="sidebar-box" style={{ marginTop: "15px" }}>
-            <div className="sidebar-header">Quick Categories</div>
+          <div className="sidebar-box">
+            <div className="sidebar-header">🔥 Quick Categories</div>
             <ul className="sidebar-links">
-              <li><Link href="/?category=NEW_UPDATE">🔥 Latest Govt Jobs</Link></li>
-              <li><Link href="/?category=ADMIT_CARD">🎫 Hall Tickets / Admit Cards</Link></li>
+              <li><Link href="/">📋 All Latest Jobs</Link></li>
+              <li><Link href="/?category=NEW_UPDATE">🆕 New Notifications</Link></li>
+              <li><Link href="/?category=ADMIT_CARD">🎫 Admit Cards / Hall Tickets</Link></li>
               <li><Link href="/?category=RESULT">🏆 Exam Results & Cutoffs</Link></li>
-              <li><Link href="/exam-prep">📚 Syllabus & Exam Prep</Link></li>
-              <li><Link href="/exam-prep/mock-test">⏱️ Free Practice Tests</Link></li>
+            </ul>
+          </div>
+          <div className="sidebar-box" style={{ marginTop: "10px" }}>
+            <div className="sidebar-header">📚 Exam Preparation</div>
+            <ul className="sidebar-links">
+              <li><Link href="/exam-prep">📖 Syllabus & Study Material</Link></li>
+              <li><Link href="/exam-prep/mock-test">⏱️ Free Mock Tests</Link></li>
+              <li><Link href="/career-paths">🗺️ Career Roadmaps</Link></li>
+              <li><Link href="/scholarships">🎓 Scholarships</Link></li>
+              <li><Link href="/resume-builder">📄 Resume Builder</Link></li>
             </ul>
           </div>
         </aside>
@@ -167,7 +174,7 @@ export default async function Home({
                 {admitCards.slice(0, 15).map((job, idx) => (
                   <tr key={job.id} style={{ background: idx % 2 === 0 ? "#fff" : "#f8f9fa" }}>
                     <td style={{ border: "1px solid #dee2e6", padding: "6px", fontSize: "13px" }}>
-                      <Link href={job.applyUrl && job.applyUrl !== "#" ? job.applyUrl : `/jobs/${job.id}`} style={{ color: "#004085", textDecoration: "none", fontWeight: "bold" }}>
+                      <Link href={`/jobs/${job.id}`} style={{ color: "#004085", textDecoration: "none", fontWeight: "bold" }}>
                         {job.title}
                       </Link>
                     </td>
