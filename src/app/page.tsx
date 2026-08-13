@@ -75,8 +75,18 @@ export default async function Home({
 
       {/* Scrolling Marquee using CSS */}
       <div style={{ background: "#ffffcc", borderBottom: "1px solid #ffcc00", padding: "8px 0", overflow: "hidden", whiteSpace: "nowrap" }}>
-        <div className="marquee-content" style={{ color: "#cc0000", fontWeight: "bold", fontSize: "14px", display: "inline-block" }}>
-          🔥 {newUpdates.map(j => `* ${j.title} (${j.organization}) * `).join(" | ")} 🔥
+        <div className="marquee-content" style={{ display: "inline-block" }}>
+          <span style={{ color: "#cc0000", fontWeight: "bold", marginRight: "10px" }}>🔥 HOT UPDATES:</span>
+          {newUpdates.map((j) => (
+            <Link 
+              key={j.id} 
+              href={`/jobs/${j.id}`} 
+              style={{ color: "#cc0000", fontWeight: "bold", fontSize: "14px", textDecoration: "none", marginRight: "20px" }}
+            >
+              * {j.title} ({j.organization}) *
+            </Link>
+          ))}
+          <span style={{ color: "#cc0000", fontWeight: "bold", marginLeft: "10px" }}>🔥</span>
         </div>
       </div>
 
