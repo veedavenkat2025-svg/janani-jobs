@@ -82,9 +82,9 @@ export default function EligibilityCalculator() {
             <option value="Any Qualification">Select Qualification</option>
             <option value="10th Pass">10th Pass</option>
             <option value="12th Pass">12th Pass</option>
-            <option value="Any Degree">Any Graduation Degree</option>
+            <option value="Degree">Any Graduation Degree</option>
             <option value="B.Tech">B.Tech / B.E.</option>
-            <option value="ITI / Diploma">ITI / Diploma</option>
+            <option value="ITI">ITI / Diploma</option>
           </select>
         </div>
 
@@ -109,6 +109,13 @@ export default function EligibilityCalculator() {
             <option value="Telangana">Telangana</option>
             <option value="Uttar Pradesh">Uttar Pradesh</option>
             <option value="Maharashtra">Maharashtra</option>
+            <option value="Delhi">Delhi</option>
+            <option value="Bihar">Bihar</option>
+            <option value="Karnataka">Karnataka</option>
+            <option value="Tamil Nadu">Tamil Nadu</option>
+            <option value="Kerala">Kerala</option>
+            <option value="Rajasthan">Rajasthan</option>
+            <option value="Madhya Pradesh">Madhya Pradesh</option>
           </select>
         </div>
 
