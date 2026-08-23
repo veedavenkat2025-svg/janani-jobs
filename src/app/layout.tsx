@@ -37,8 +37,19 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${plusJakartaSans.variable} antialiased`}>
-        {children}
+      <body className={`${plusJakartaSans.variable} antialiased`} style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+        <div style={{ flex: '1 0 auto' }}>
+          {children}
+        </div>
+        
+        {/* Global Disclaimer Footer for Google Play Store Policy Compliance */}
+        <footer style={{ background: "#f8f9fa", borderTop: "1px solid #dee2e6", padding: "15px", textAlign: "center", fontSize: "12px", color: "#6c757d", flexShrink: 0 }}>
+          <div className="container">
+            <strong>Disclaimer:</strong> Janani Jobs is an independent platform and <strong>does not represent any government entity</strong>. 
+            All government job information provided on this app/website is collected from public domains and official government websites. 
+            Official source links (e.g., .gov.in domains) are provided within each job posting for verification.
+          </div>
+        </footer>
       </body>
     </html>
   );
