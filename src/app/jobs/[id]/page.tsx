@@ -136,16 +136,27 @@ export default async function JobDetailsPage(props: { params: Promise<{ id: stri
 
             {/* Important Links Box */}
             {(() => {
+              // ALWAYS determine the official portal URL based on organization name
+              const orgLower = job.organization.toLowerCase();
+              let officialPortalUrl = "";
+              
+              if (orgLower.includes("ssc") || orgLower.includes("staff selection")) officialPortalUrl = "https://ssc.gov.in";
+              else if (orgLower.includes("upsc") || orgLower.includes("union public")) officialPortalUrl = "https://upsc.gov.in";
+              else if (orgLower.includes("ibps") || orgLower.includes("bank")) officialPortalUrl = "https://www.ibps.in";
+              else if (orgLower.includes("appsc")) officialPortalUrl = "https://psc.ap.gov.in";
+              else if (orgLower.includes("tspsc") || orgLower.includes("tgpsc")) officialPortalUrl = "https://tspsc.gov.in";
+              else if (orgLower.includes("rrb") || orgLower.includes("railway")) officialPortalUrl = "https://indianrailways.gov.in";
+              else if (orgLower.includes("india post") || orgLower.includes("postal")) officialPortalUrl = "https://www.indiapost.gov.in";
+              else if (orgLower.includes("drdo")) officialPortalUrl = "https://www.drdo.gov.in";
+              else if (orgLower.includes("isro")) officialPortalUrl = "https://www.isro.gov.in";
+              else if (job.applyUrl && job.applyUrl.includes(".gov")) officialPortalUrl = job.applyUrl;
+              else officialPortalUrl = `https://www.google.com/search?q=${encodeURIComponent(job.organization + " official website")}`;
+
+              // Determine the final Apply URL. 
+              // If the scraped URL is a blog (like indgovtjobs), override it with the official portal to comply with Google Play policies.
               let finalApplyUrl = job.applyUrl;
-              if (!finalApplyUrl || finalApplyUrl === "#") {
-                const orgLower = job.organization.toLowerCase();
-                if (orgLower.includes("ssc")) finalApplyUrl = "https://ssc.gov.in";
-                else if (orgLower.includes("upsc")) finalApplyUrl = "https://upsc.gov.in";
-                else if (orgLower.includes("ibps")) finalApplyUrl = "https://www.ibps.in";
-                else if (orgLower.includes("appsc")) finalApplyUrl = "https://psc.ap.gov.in";
-                else if (orgLower.includes("tspsc") || orgLower.includes("tgpsc")) finalApplyUrl = "https://tspsc.gov.in";
-                else if (orgLower.includes("rrb") || orgLower.includes("railway")) finalApplyUrl = "https://indianrailways.gov.in";
-                else finalApplyUrl = `https://www.google.com/search?q=${encodeURIComponent(job.title + " official portal link")}`;
+              if (!finalApplyUrl || finalApplyUrl === "#" || finalApplyUrl.includes("indgovtjobs") || finalApplyUrl.includes("freejobalert")) {
+                finalApplyUrl = officialPortalUrl;
               }
 
               // Dynamic button labels based on category
