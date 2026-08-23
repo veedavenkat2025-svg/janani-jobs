@@ -120,9 +120,9 @@ export default function EligibilityCalculator() {
             <option value="">All Qualifications</option>
             <option value="10th Pass">10th Pass</option>
             <option value="12th Pass">12th Pass</option>
-            <option value="Degree">Any Graduation Degree</option>
+            <option value="Graduation">Any Graduation Degree</option>
             <option value="B.Tech">B.Tech / B.E.</option>
-            <option value="ITI">ITI / Diploma</option>
+            <option value="Diploma">ITI / Diploma</option>
           </select>
         </div>
 

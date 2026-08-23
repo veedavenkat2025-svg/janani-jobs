@@ -109,36 +109,9 @@ public class MainActivity extends BridgeActivity {
                     }
                 });
 
-                // Custom WebViewClient for external links handling
-                webView.setWebViewClient(new WebViewClient() {
-                    @Override
-                    public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-                        String url = request.getUrl().toString();
-                        
-                        // Handle WhatsApp links directly
-                        if (url.startsWith("whatsapp://") || url.startsWith("https://api.whatsapp.com/")) {
-                            try {
-                                Intent intent = new Intent(Intent.ACTION_VIEW);
-                                intent.setData(Uri.parse(url));
-                                startActivity(intent);
-                                return true;
-                            } catch (Exception e) {
-                                return false; // WhatsApp not installed, let webview try to handle it
-                            }
-                        }
-
-                        // Open external government sites and PDFs in default Android browser
-                        if (!url.contains("janani-jobs-beta.vercel.app") && 
-                            !url.contains("localhost") && 
-                            !url.startsWith("file://")) {
-                            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                            startActivity(intent);
-                            return true;
-                        }
-                        
-                        return false;
-                    }
-                });
+                // Capacitor automatically handles external links and opens them in the system browser
+                // if they do not match the server url in capacitor.config.ts.
+                // Therefore, we should NOT override setWebViewClient, as it breaks the Capacitor Bridge.
             }
         }
     }
