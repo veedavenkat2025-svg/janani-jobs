@@ -78,7 +78,7 @@ export default async function Home({
       <div style={{ background: "#ffffcc", borderBottom: "1px solid #ffcc00", padding: "8px 0", overflow: "hidden", whiteSpace: "nowrap" }}>
         <div className="marquee-content" style={{ display: "inline-block" }}>
           <span style={{ color: "#cc0000", fontWeight: "bold", marginRight: "10px" }}>🔥 HOT UPDATES:</span>
-          {newUpdates.map((j) => (
+          {newUpdates.slice(0, 10).map((j) => (
             <Link 
               key={j.id} 
               href={`/jobs/${j.id}`} 
