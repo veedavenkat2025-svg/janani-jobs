@@ -1,3 +1,4 @@
+export const revalidate = 3600;
 import Link from 'next/link';
 import { prisma } from '@/lib/prisma';
 import EligibilityCalculator from './components/EligibilityCalculator';
